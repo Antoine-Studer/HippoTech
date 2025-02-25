@@ -34,7 +34,7 @@ async function loadCollection() {
 }
 
 document.getElementById("backBtn").addEventListener("click", () => {
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
 });
 
 document.getElementById("resetBtn").addEventListener("click", async () => {
