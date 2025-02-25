@@ -1,24 +1,4 @@
-const cardNames = [
-    "Ourasi - Trotteur Français",
-    "Trêve - Pur-Sang",
-    "Cirrus - Selle Français",
-    "Jappeloup - Anglo-Arabe",
-    "Al Capone - Percheron",
-    "Bold Eagle - Trotteur Français",
-    "Galopin - Pur-Sang",
-    "Quartz - Selle Français"
-];
-
-function displayCollection() {
-    let collection;
-    try {
-        collection = JSON.parse(localStorage.getItem('cardCollection') || '[]');
-        console.log("Loaded collection:", collection);
-    } catch (e) {
-        console.error("Error loading collection:", e);
-        collection = [];
-    }
-
+function displayCollection(collection, cardNames) {
     const collectionDisplay = document.getElementById("collectionDisplay");
     collectionDisplay.innerHTML = "";
 
@@ -43,11 +23,13 @@ function displayCollection() {
     });
 }
 
-function resetCollection() {
-    if (confirm("Are you sure you want to reset your collection? This cannot be undone.")) {
-        localStorage.removeItem('cardCollection');
-        displayCollection();
-        console.log("Collection reset");
+async function loadCollection() {
+    try {
+        const response = await fetch('/api/collection');
+        const data = await response.json();
+        displayCollection(data.collection, data.cardNames);
+    } catch (error) {
+        console.error("Error loading collection:", error);
     }
 }
 
@@ -55,6 +37,17 @@ document.getElementById("backBtn").addEventListener("click", () => {
     window.location.href = "index.html";
 });
 
-document.getElementById("resetBtn").addEventListener("click", resetCollection);
+document.getElementById("resetBtn").addEventListener("click", async () => {
+    if (confirm("Are you sure you want to reset your collection? This cannot be undone.")) {
+        try {
+            await fetch('/api/reset-collection', { method: 'POST' });
+            loadCollection(); // Refresh display
+            console.log("Collection reset");
+        } catch (error) {
+            console.error("Error resetting collection:", error);
+        }
+    }
+});
 
-displayCollection();
+// Load collection on page load
+loadCollection();
