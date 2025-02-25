@@ -1,12 +1,7 @@
-const cardNames = [
-    "Ourasi - Trotteur Français",
-    "Trêve - Pur-Sang",
-    "Cirrus - Selle Français",
-    "Jappeloup - Anglo-Arabe",
-    "Al Capone - Percheron",
-    "Bold Eagle - Trotteur Français",
-    "Galopin - Pur-Sang",
-    "Quartz - Selle Français"
+const cardProperties = [
+    {"Majico 6 - Trotteur Français": "majico_6.png"},
+    {"Imperial Cel - Pur-Sang": "imperial_cel.png"},
+    {"Ganador Cel - Selle Français":  "garanor_cel.png"},
 ];
 
 function displayCollection() {
@@ -28,13 +23,15 @@ function displayCollection() {
         ownedCards.set(key, (ownedCards.get(key) || 0) + 1);
     });
 
-    cardNames.forEach(name => {
+    
+    cardProperties.forEach(name => {
         ["common", "rare", "legendary"].forEach(rarity => {
             const key = `${name}-${rarity}`;
             const count = ownedCards.get(key) || 0;
             const cardElement = document.createElement("div");
             cardElement.classList.add("card", rarity);
             cardElement.innerHTML = `
+                <div class="img-div"> <img class="card-image" src="images/${card.image}" /> </div>
                 <div class="card-name">${count > 0 ? name : "???"}</div>
                 <div class="card-rarity">${rarity.toUpperCase()}${count > 0 ? " (x" + count + ")" : ""}</div>
             `;

@@ -100,3 +100,9 @@ h1 {
     position: relative;
     z-index: 1;
 }
+
+.card-image {
+    width: 150px;
+    height: 150px;
+    margin-top: 10px;
+}

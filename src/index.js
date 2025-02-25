@@ -1,13 +1,8 @@
 // Sample card data
-const cardNames = [
-    "Ourasi - Trotteur Français",
-    "Trêve - Pur-Sang",
-    "Cirrus - Selle Français",
-    "Jappeloup - Anglo-Arabe",
-    "Al Capone - Percheron",
-    "Bold Eagle - Trotteur Français",
-    "Galopin - Pur-Sang",
-    "Quartz - Selle Français"
+const cardProperties = [
+    {"Majico 6 - Trotteur Français": "majico_6.png"},
+    {"Imperial Cel - Pur-Sang": "imperial_cel.png"},
+    {"Ganador Cel - Selle Français":  "garanor_cel.png"},
 ];
 
 const rarities = [
@@ -17,7 +12,9 @@ const rarities = [
 ];
 
 function getRandomCard() {
-    const randomName = cardNames[Math.floor(Math.random() * cardNames.length)];
+    const randomProperties = cardProperties[Math.floor(Math.random() * cardProperties.length)];
+    const cardName = Object.keys(randomProperties)[0];
+    const cardImage = Object.values(randomProperties)[0];
     const randomChance = Math.random();
     console.log("Random chance:", randomChance);
     let selectedRarity = "common";
@@ -26,7 +23,7 @@ function getRandomCard() {
             selectedRarity = rarity.name;
         }
     }
-    return { name: randomName, rarity: selectedRarity };
+    return { name: cardName, image: cardImage,  rarity: selectedRarity };
 }
 
 function saveToCollection(card) {
@@ -50,6 +47,7 @@ function openBooster() {
         const cardElement = document.createElement("div");
         cardElement.classList.add("card", card.rarity);
         cardElement.innerHTML = `
+            <div class="img-div"> <img class="card-image" src="images/${card.image}" /> </div>
             <div class="card-name">${card.name}</div>
             <div class="card-rarity">${card.rarity.toUpperCase()}</div>
         `;
