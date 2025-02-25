@@ -7,16 +7,11 @@ app.use(express.static(__dirname));
 app.use(express.json()); // For parsing JSON requests
 
 // Card data
-const cardNames = [
-    "Ourasi - Trotteur Français",
-    "Trêve - Pur-Sang",
-    "Cirrus - Selle Français",
-    "Jappeloup - Anglo-Arabe",
-    "Al Capone - Percheron",
-    "Bold Eagle - Trotteur Français",
-    "Galopin - Pur-Sang",
-    "Quartz - Selle Français"
-];
+const cardProperties = [
+    { name: "Ganador Cel", img_path: "ganador_cel.png" },
+    { name: "Imperial Cel", img_path: "imperial_cel.png" },
+    { name: "Majico 6", img_path: "majico_6.png" }
+]
 
 const rarities = [
     { name: "common", chance: 0.7 },
@@ -29,7 +24,10 @@ let collection = [];
 
 // Generate random card
 function getRandomCard() {
-    const randomName = cardNames[Math.floor(Math.random() * cardNames.length)];
+    const randomProperties = cardProperties[Math.floor(Math.random() * cardProperties.length)];
+    cardName = randomProperties.name;
+    cardImage = "images/" + randomProperties.img_path;
+    console.log(cardName, cardImage);
     const randomChance = Math.random();
     let selectedRarity = "common";
     for (const rarity of rarities) {
@@ -37,7 +35,7 @@ function getRandomCard() {
             selectedRarity = rarity.name;
         }
     }
-    return { name: randomName, rarity: selectedRarity };
+    return { name: cardName, img: cardImage, rarity: selectedRarity };
 }
 
 // API Endpoints
@@ -54,7 +52,7 @@ app.get('/api/open-booster', (req, res) => {
 
 // Get the collection
 app.get('/api/collection', (req, res) => {
-    res.json({ collection, cardNames });
+    res.json({ collection, cardProperties });
 });
 
 // Reset the collection

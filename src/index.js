@@ -5,7 +5,7 @@ function displayCards(cards) {
         const cardElement = document.createElement("div");
         cardElement.classList.add("card", card.rarity);
         cardElement.innerHTML = `
-            <div class="img-div"> <img class="card-image" src="images/${card.image}" /> </div>
+            <div class="img-div"> <img class="card-image" src="${card.img}" /> </div>
             <div class="card-name">${card.name}</div>
             <div class="card-rarity">${card.rarity.toUpperCase()}</div>
         `;
