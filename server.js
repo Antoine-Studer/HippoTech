@@ -25,7 +25,7 @@ let collection = [];
 // Track last booster opening time by IP
 let lastBoosterOpenTime = new Map();
 // const COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
-const COOLDOWN_MS = 1000; // 10 seconds for testing
+const COOLDOWN_MS = 10 *1000; // 10 seconds for testing
 
 // Generate random card
 function getRandomCard() {

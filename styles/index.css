@@ -79,14 +79,19 @@ h2 {
 }
 
 #cooldownDisplay {
-    margin: 15px 0;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    margin: 0;
     padding: 10px 15px;
-    background-color: #f8d7da;
+    background-color: rgba(248, 215, 218, 0.9);
     border: 1px solid #f5c6cb;
     border-radius: 5px;
     color: #721c24;
     font-size: 16px;
     text-align: center;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #cooldownDisplay.cooldown-hidden {
@@ -102,8 +107,12 @@ h2 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    margin-top: 30px;
+    margin-top: 200px;
     max-width: 1000px;
+}
+
+#cardDisplay.hidden {
+    display: none;
 }
 
 @keyframes openBooster {

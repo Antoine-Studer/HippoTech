@@ -2,6 +2,7 @@ let cooldownInterval;
 const cooldownDisplay = document.getElementById("cooldownDisplay");
 const cooldownTimer = document.getElementById("cooldownTimer");
 const openBoosterBtn = document.getElementById("openBoosterBtn");
+const cardDisplay = document.getElementById("cardDisplay");
 
 // Format remaining time as HH:MM:SS
 function formatTime(milliseconds) {
@@ -58,7 +59,6 @@ async function checkCooldownStatus() {
 }
 
 function displayCards(cards) {
-    const cardDisplay = document.getElementById("cardDisplay");
     cardDisplay.innerHTML = "";
     cards.forEach(card => {
         const cardElement = document.createElement("div");
@@ -82,7 +82,27 @@ document.getElementById("openBoosterBtn").addEventListener("click", async () => 
         }
         
         const booster = await response.json();
+        
+        // Show cards and hide other elements
+        const mainContent = document.querySelectorAll('body > :not(#cardDisplay):not(#continueBtn):not(#cooldownDisplay)');
+        mainContent.forEach(element => element.classList.add('hidden'));
+        
+        // Display cards
         displayCards(booster);
+        cardDisplay.classList.remove('hidden');
+        cardDisplay.classList.add('show');
+        
+        // Show continue button
+        const continueBtn = document.getElementById('continueBtn') || document.createElement('button');
+        if (!continueBtn.id) {
+            continueBtn.id = 'continueBtn';
+            continueBtn.textContent = 'Continue';
+            document.body.appendChild(continueBtn);
+        }
+        
+        setTimeout(() => {
+            continueBtn.style.display = 'block';
+        }, 500);
         
         // After opening a booster, check cooldown status
         checkCooldownStatus();
@@ -91,53 +111,35 @@ document.getElementById("openBoosterBtn").addEventListener("click", async () => 
     }
 });
 
-
-function openBooster() {
-    const cardDisplay = document.getElementById("cardDisplay");
-    cardDisplay.innerHTML = "";
-    for (let i = 0; i < 5; i++) {
-        const card = getRandomCard();
-        saveToCollection(card);
-        const cardElement = document.createElement("div");
-        cardElement.classList.add("card", card.rarity);
-        cardElement.innerHTML = `
-            <div class="card-name">${card.name}</div>
-            <div class="card-rarity">${card.rarity.toUpperCase()}</div>
-        `;
-        cardDisplay.appendChild(cardElement);
-    }
-}
-
-// Event listeners
-document.getElementById("openBoosterBtn").addEventListener("click", openBooster);
-document.getElementById('openBoosterBtn').addEventListener('click', function() {
-    const mainContent = document.querySelectorAll('body > :not(#cardDisplay):not(#continueBtn)');
-    const cardDisplay = document.getElementById('cardDisplay');
-    const continueBtn = document.getElementById('continueBtn') || document.createElement('button');
-    
-    if (!continueBtn.id) {
+// Create and add continue button if it doesn't exist
+function ensureContinueButtonExists() {
+    if (!document.getElementById('continueBtn')) {
+        const continueBtn = document.createElement('button');
         continueBtn.id = 'continueBtn';
         continueBtn.textContent = 'Continue';
-        document.body.appendChild(continueBtn);
-    }
-
-    mainContent.forEach(element => element.classList.add('hidden'));
-    cardDisplay.classList.add('show');
-
-    setTimeout(() => {
-        continueBtn.style.display = 'block';
-    }, 2000);
-
-    continueBtn.addEventListener('click', function() {
-        mainContent.forEach(element => element.classList.remove('hidden'));
-        cardDisplay.classList.remove('show');
         continueBtn.style.display = 'none';
-    });
-});
+        document.body.appendChild(continueBtn);
+        
+        // Add event listener
+        continueBtn.addEventListener('click', function() {
+            // Unhide main content
+            const mainContent = document.querySelectorAll('body > .hidden:not(#cardDisplay):not(#continueBtn)');
+            mainContent.forEach(element => element.classList.remove('hidden'));
+            
+            // Hide cards and continue button
+            cardDisplay.classList.remove('show');
+            cardDisplay.classList.add('hidden');
+            continueBtn.style.display = 'none';
+        });
+    }
+}
 
 document.getElementById("collectionBtn").addEventListener("click", () => {
     window.location.href = "collection.html";
 });
 
-// Check cooldown status when the page loads
-document.addEventListener('DOMContentLoaded', checkCooldownStatus);
+// Check cooldown status and ensure continue button exists when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    checkCooldownStatus();
+    ensureContinueButtonExists();
+});
