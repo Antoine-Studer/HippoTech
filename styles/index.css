@@ -3,30 +3,70 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f0f0;
+    background: rgb(255,136,0);
+    background: linear-gradient(56deg, rgba(255,136,0,1) 39%, rgba(255,201,0,1) 70%, rgba(237,217,26,1) 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     margin: 0;
     padding: 20px;
+    height: 100vh; /* Ensure the body takes the full height of the viewport */
 }
 
 h1 {
-    color: #333;
-    margin-bottom: 20px;
+    font-family: 'Rye', cursive;
+    font-size: 4em;
+    color: #8B4513; /* Saddle brown color */
+    margin-bottom: 10px;
+    text-shadow: 2px 2px #000; /* Adds a shadow for a more rustic look */
 }
 
-#openBoosterBtn, #collectionBtn {
-    padding: 15px 30px;
-    font-size: 18px;
-    background-color: #4CAF50;
+h2 {
+    font-family: 'Rye', cursive;
+    font-size: 2em;
+    color: #A0522D; /* Sienna color */
+    margin-bottom: 20px;
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+}
+
+#openBoosterBtn {
+    padding: 20px 40px;
+    font-size: 24px;
+    background-color: #8B4513; /* Saddle brown color */
     color: white;
-    border: none;
+    border: 2px solid #A0522D; /* Sienna color */
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 20px;
+    font-family: 'Rye', cursive;
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
 }
 
-#openBoosterBtn:hover, #collectionBtn:hover {
-    background-color: #45a049;
+#openBoosterBtn:hover {
+    background-color: #A0522D; /* Sienna color */
+    transform: scale(1.05);
+}
+
+#collectionBtn {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #8B4513; /* Saddle brown color */
+    color: white;
+    border: 2px solid #A0522D; /* Sienna color */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 10px;
+    font-family: 'Rye', cursive;
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+    position: absolute;
+    bottom: 20px; /* Position the button at the bottom */
+}
+
+#collectionBtn:hover {
+    background-color: #A0522D; /* Sienna color */
+    transform: scale(1.05);
 }
 
 #cardDisplay {
@@ -36,6 +76,22 @@ h1 {
     gap: 20px;
     margin-top: 30px;
     max-width: 1000px;
+}
+
+@keyframes openBooster {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.show {
+    display: flex;
+    animation: openBooster 0.5s ease-in-out forwards;
 }
 
 .card {
@@ -83,8 +139,38 @@ h1 {
 }
 
 .card.common { border: 2px solid #666; }
-.card.rare { border: 2px solid #FFD700; }
-.card.legendary { border: 2px solid #FF4500; }
+.card.rare { 
+    border: 2px solid #FF4500; /* Red color */
+    animation: rareShine 1.5s infinite;
+}
+.card.legendary { 
+    border: 2px solid #800080; /* Purple color */
+    animation: legendaryShine 1.5s infinite;
+}
+
+@keyframes rareShine {
+    0% {
+        box-shadow: 0 0 5px #FF4500;
+    }
+    50% {
+        box-shadow: 0 0 20px #FF4500;
+    }
+    100% {
+        box-shadow: 0 0 5px #FF4500;
+    }
+}
+
+@keyframes legendaryShine {
+    0% {
+        box-shadow: 0 0 10px #800080, 0 0 20px #800080, 0 0 30px #800080;
+    }
+    50% {
+        box-shadow: 0 0 40px #800080, 0 0 60px #800080, 0 0 80px #800080;
+    }
+    100% {
+        box-shadow: 0 0 10px #800080, 0 0 20px #800080, 0 0 30px #800080;
+    }
+}
 
 .card-name {
     font-weight: bold;
@@ -106,3 +192,27 @@ h1 {
     height: 150px;
     margin-top: 10px;
 }
+
+.hidden {
+    display: none;
+}
+
+#continueBtn {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #8B4513;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 20px;
+    display: none; /* Initially hidden */
+    font-family: 'Rye', cursive;
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+}
+
+#continueBtn:hover {
+    background-color: #A0522D;
+}
+
