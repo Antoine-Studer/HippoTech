@@ -29,6 +29,34 @@ h1 {
     background-color: #45a049;
 }
 
+#openBoosterBtn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#openBoosterBtn:disabled:hover {
+    background-color: #cccccc;
+}
+
+#cooldownDisplay {
+    margin: 15px 0;
+    padding: 10px 15px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    color: #721c24;
+    font-size: 16px;
+    text-align: center;
+}
+
+#cooldownDisplay.cooldown-hidden {
+    display: none;
+}
+
+#cooldownTimer {
+    font-weight: bold;
+}
+
 #cardDisplay {
     display: flex;
     flex-wrap: wrap;

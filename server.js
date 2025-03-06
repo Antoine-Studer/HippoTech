@@ -22,12 +22,17 @@ const rarities = [
 // In-memory collection (replace with database later if needed)
 let collection = [];
 
+// Track last booster opening time by IP
+let lastBoosterOpenTime = new Map();
+// const COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+const COOLDOWN_MS = 1000; // 10 seconds for testing
+
 // Generate random card
 function getRandomCard() {
     const randomProperties = cardProperties[Math.floor(Math.random() * cardProperties.length)];
     cardName = randomProperties.name;
     cardImage = "images/" + randomProperties.img_path;
-    console.log(cardName, cardImage);
+    // console.log(cardName, cardImage);
     const randomChance = Math.random();
     let selectedRarity = "common";
     for (const rarity of rarities) {
@@ -41,12 +46,33 @@ function getRandomCard() {
 // API Endpoints
 // Open a booster pack
 app.get('/api/open-booster', (req, res) => {
+    const clientIp = req.ip || req.connection.remoteAddress;
+    const currentTime = Date.now();
+    const lastOpenTime = lastBoosterOpenTime.get(clientIp) || 0;
+    const timeElapsed = currentTime - lastOpenTime;
+    
+    // Check if cooldown period has passed
+    if (lastOpenTime && timeElapsed < COOLDOWN_MS) {
+        const remainingTime = COOLDOWN_MS - timeElapsed;
+        const remainingMinutes = Math.ceil(remainingTime / (60 * 1000));
+        return res.status(429).json({
+            error: "Cooldown period not over",
+            remainingTime: remainingTime,
+            remainingMinutes: remainingMinutes,
+            message: `You can open another booster in ${remainingMinutes} minutes`
+        });
+    }
+    
     const booster = [];
     for (let i = 0; i < 5; i++) {
         const card = getRandomCard();
         booster.push(card);
         collection.push(card); // Save to collection
     }
+    
+    // Update last open time
+    lastBoosterOpenTime.set(clientIp, currentTime);
+    
     res.json(booster);
 });
 
@@ -59,6 +85,30 @@ app.get('/api/collection', (req, res) => {
 app.post('/api/reset-collection', (req, res) => {
     collection = [];
     res.json({ message: "Collection reset" });
+});
+
+// Get cooldown status
+app.get('/api/cooldown-status', (req, res) => {
+    const clientIp = req.ip || req.connection.remoteAddress;
+    const currentTime = Date.now();
+    const lastOpenTime = lastBoosterOpenTime.get(clientIp) || 0;
+    const timeElapsed = currentTime - lastOpenTime;
+    
+    if (lastOpenTime && timeElapsed < COOLDOWN_MS) {
+        const remainingTime = COOLDOWN_MS - timeElapsed;
+        const remainingMinutes = Math.ceil(remainingTime / (60 * 1000));
+        return res.json({
+            canOpen: false,
+            remainingTime: remainingTime,
+            remainingMinutes: remainingMinutes,
+            message: `You can open another booster in ${remainingMinutes} minutes`
+        });
+    }
+    
+    res.json({
+        canOpen: true,
+        message: "You can open a booster pack now"
+    });
 });
 
 // Start the server
