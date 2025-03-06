@@ -28,8 +28,9 @@ function displayCollection() {
         ownedCards.set(key, (ownedCards.get(key) || 0) + 1);
     });
 
-    cardNames.forEach(name => {
-        ["common", "rare", "legendary"].forEach(rarity => {
+    const sortedRarities = ["common", "rare", "legendary"];
+    sortedRarities.forEach(rarity => {
+        cardNames.forEach(name => {
             const key = `${name}-${rarity}`;
             const count = ownedCards.get(key) || 0;
             const cardElement = document.createElement("div");
