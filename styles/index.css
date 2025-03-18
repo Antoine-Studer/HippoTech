@@ -140,7 +140,6 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     padding: 10px;
     transition: transform 0.3s;
     position: relative; /* Needed for the pseudo-element */
@@ -215,6 +214,74 @@ h2 {
     text-align: center;
     position: relative; /* Keeps text above the holographic layer */
     z-index: 1; /* Ensures text stays on top */
+}
+
+.card-type {
+    font-style: italic;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    position: relative;
+    z-index: 1;
+}
+
+.card-rarity {
+    font-size: 14px;
+    color: #555;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 8px;
+}
+
+.card-stats {
+    width: 90%;
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+    margin-top: 5px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.stat-name {
+    width: 60px;
+    text-align: right;
+    padding-right: 5px;
+    font-size: 11px;
+}
+
+.stat-value {
+    width: 25px;
+    text-align: left;
+    padding-left: 5px;
+    font-size: 11px;
+}
+
+.stat-bar-container {
+    flex-grow: 1;
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.stat-bar {
+    height: 100%;
+    background: linear-gradient(to right, #3498db, #2980b9);
+    border-radius: 4px;
+}
+
+/* Modify the rarity-specific stat bars */
+.rare .stat-bar {
+    background: linear-gradient(to right, #e74c3c, #c0392b);
+}
+
+.legendary .stat-bar {
+    background: linear-gradient(to right, #9b59b6, #8e44ad);
 }
 
 .card-rarity {
