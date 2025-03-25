@@ -16,7 +16,19 @@
     <h2>Horse Trading Card Game</h2>
     <button id="openBoosterBtn">Open Booster Pack</button>
     <button id="collectionBtn">Collection</button>
-    <div id="cardDisplay" class="hidden"></div>
+    <div id="cardDisplay" class="hidden">
+      <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.157.0/examples/"
+            }
+        }
+      </script>
+      <script type="module" src="src/three.js"></script>
+    </div>
+    <div id="threejs-container">
+    </div>
     <script src="src/index.js"></script>
 </body>
 </html>

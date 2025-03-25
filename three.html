@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+    <div id="full-display">
+        <div id="cardDisplay"></div>
+    </div>
+</body>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.157.0/examples/"
+        }
+    }
+</script>
+<script type="module" src="src/three.js"></script>
+</html>
+<style>
+    #full-display {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    #cardDisplay {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        width: 100%;
+        max-width: 1200px;
+    }
+    .card {
+        width: 100%;
+        height: 500px;
+        position: relative;
+        overflow: hidden;
+    }
+    .card canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+        #cardDisplay {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 600px) {
+        #cardDisplay {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    body {
+        background: rgb(255,136,0);
+        background: linear-gradient(56deg, rgba(255,136,0,1) 39%, rgba(255,201,0,1) 70%, rgba(237,217,26,1) 100%);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+</style>
