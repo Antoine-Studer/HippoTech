@@ -63,10 +63,30 @@ function displayCards(cards) {
     cards.forEach(card => {
         const cardElement = document.createElement("div");
         cardElement.classList.add("card", card.rarity);
+        
+        // Create the HTML for stats bars
+        let statsHTML = '';
+        for (const [stat, value] of Object.entries(card.stats)) {
+            const statName = stat.charAt(0).toUpperCase() + stat.slice(1);
+            statsHTML += `
+                <div class="stat-row">
+                    <span class="stat-name">${statName}</span>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar" style="width: ${value}%"></div>
+                    </div>
+                    <span class="stat-value">${value}</span>
+                </div>
+            `;
+        }
+        
         cardElement.innerHTML = `
             <div class="img-div"> <img class="card-image" src="${card.img}" /> </div>
             <div class="card-name">${card.name}</div>
+            <div class="card-type">${card.type}</div>
             <div class="card-rarity">${card.rarity.toUpperCase()}</div>
+            <div class="card-stats">
+                ${statsHTML}
+            </div>
         `;
         cardDisplay.appendChild(cardElement);
     });
