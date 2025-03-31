@@ -34,10 +34,10 @@ function updateCooldownTimer(remainingTime) {
 
 // Check cooldown status from the server
 async function checkCooldownStatus() {
+    const response = await fetch('/api/cooldown-status');
+    console.log(await response);
     try {
-        const response = await fetch('/api/cooldown-status');
         const data = await response.json();
-        
         if (!data.canOpen) {
             let remainingTime = data.remainingTime;
             updateCooldownTimer(remainingTime);

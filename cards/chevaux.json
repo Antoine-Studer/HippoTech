@@ -1,0 +1,97 @@
+[
+    {
+      "nom": "Tempête",
+      "titre": "le cheval divin",
+      "description": "Le cheval parfait… à condition de pouvoir le monter. La légende raconte que certains l’on déjà vu voler.",
+      "charisme": 150,
+      "vitesse_maximale": 150,
+      "acceleration": 100
+    },
+    {
+      "nom": "RouxCarnage",
+      "titre": "le destrier fidèle",
+      "description": "Ce magnifique destrier à un seul et unique maître à qui il a voué sa loyauté.",
+      "charisme": 130,
+      "vitesse_maximale": 100,
+      "acceleration": 130,
+      "couleur_robe": "roux / cheveux roux"
+    },
+    {
+      "nom": "Roquefort",
+      "titre": "le puissant",
+      "description": "Ce destrier a été dressé par les géants dans les montagnes du Nord. Il est tristement célèbre pour sa combativité, attention à ne pas vous faire désarçonner.",
+      "charisme": 110,
+      "vitesse_maximale": 130,
+      "acceleration": 80
+    },
+    {
+      "nom": "Beato",
+      "titre": "le grand sabot",
+      "description": "Destrier d'exception, il se démarque au combat par son courage et sa détermination. Il saura toujours vous surprendre, il suffit de lui donner à boire.",
+      "charisme": 100,
+      "vitesse_maximale": 100,
+      "acceleration": 100
+    },
+    {
+      "nom": "Mirage",
+      "titre": "l’intangible",
+      "description": "Ce destrier d’origine inconnue suscite beaucoup de curiosité parmi le public. N’essayez pas de le rattraper pour en savoir plus, il disparaît sans laisser de trace.",
+      "charisme": 90,
+      "vitesse_maximale": 70,
+      "acceleration": 120
+    },
+    {
+      "nom": "Tytoo",
+      "titre": "le destrier fonceur",
+      "description": "Même s’il paraît lent au départ méfiez vous, une fois lancé il est inarrêtable semant le désordre sur son passage.",
+      "charisme": 70,
+      "vitesse_maximale": 150,
+      "acceleration": 20
+    },
+    {
+      "nom": "Alzéphyr",
+      "titre": "le sage",
+      "description": "Jadis ce cheval appartenait à un vagabond, on raconte que ce cheval a visité plus de contrées que n’importe quel homme. Il n’est plus dans la force de l'âge mais il reste cependant un bon canasson.",
+      "charisme": 90,
+      "vitesse_maximale": 110,
+      "acceleration": 80
+    },
+    {
+      "nom": "Canasson n°1104",
+      "description": "Cheval né pour la course, il est ni mauvais ni exceptionnel. Guidé par un bon cavalier, il devient un destrier fatal.",
+      "charisme": 60,
+      "vitesse_maximale": 100,
+      "acceleration": 60
+    },
+    {
+      "nom": "Canasson n°1808",
+      "description": "Ami du numéro 1104, il est lui aussi à la recherche d’un titre qui lui permettrait d'ouvrir le compteur. Son meilleur palmarès est 5 secondes derrière le premier.",
+      "charisme": 50,
+      "vitesse_maximale": 60,
+      "acceleration": 90
+    },
+    {
+      "nom": "Olive",
+      "titre": "la brise d’Egée",
+      "description": "Adepte de la tranquillité et du calme, c’est un cheval indépendant cependant vous ne pourrez pas la repousser dans ses retranchements, elle s'arrêtera avant.",
+      "charisme": 40,
+      "vitesse_maximale": 70,
+      "acceleration": 70
+    },
+    {
+      "nom": "Marguerite",
+      "titre": "l’incomprise",
+      "description": "Envoyée dans la course à son insu, elle se retrouve toujours avec les pires cavaliers. Vous voyez bien que c’est pas un cheval non ?",
+      "charisme": 20,
+      "vitesse_maximale": 80,
+      "acceleration": 40
+    },
+    {
+      "nom": "Volt",
+      "titre": "le condensateur",
+      "description": "Connu pour son accélération hors du commun, attention à ne pas le perdre des yeux, heureusement il se fatigue vite.",
+      "charisme": 80,
+      "vitesse_maximale": 40,
+      "acceleration": 140
+    }
+  ]

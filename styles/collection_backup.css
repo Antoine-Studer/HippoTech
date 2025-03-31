@@ -1,0 +1,96 @@
+body {
+    font-family: 'Rye', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 20px;
+    height: 100vh; /* Ensure the body takes the full height of the viewport */
+}
+
+h1 {
+    font-size: 4em;
+    color: #8B4513; /* Saddle brown color */
+    margin-bottom: 10px;
+    text-shadow: 2px 2px #000; /* Adds a shadow for a more rustic look */
+}
+
+h2 {
+    font-size: 2em;
+    color: #A0522D; /* Sienna color */
+    margin-bottom: 20px;
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* #collectionDisplay {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    max-width: 1000px;
+} */
+
+#backBtn, #resetBtn {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #8B4513; /* Saddle brown color */
+    color: white;
+    border: 2px solid #A0522D; /* Sienna color */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-family: 'Rye', cursive; /* Apply the western-themed font */
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+}
+
+#backBtn:hover, #resetBtn:hover {
+    background-color: #A0522D; /* Sienna color */
+    transform: scale(1.05);
+}
+
+.filters-container {
+    background-color: rgba(139, 69, 19, 0.1);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filters-container h3 {
+    margin: 5px 0 10px;
+    color: #8B4513;
+    text-shadow: 1px 1px #000;
+}
+
+.filter-group {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.filter-group label {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #8B4513;
+}
+
+.filter-group select {
+    padding: 5px 10px;
+    border: 2px solid #A0522D;
+    border-radius: 4px;
+    background-color: #fff;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}

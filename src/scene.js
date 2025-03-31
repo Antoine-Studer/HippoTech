@@ -4,7 +4,6 @@ import * as THREE from 'three';
 export function initScene(displayName, renderer, camera) {
     // Create renderer
     const scene = new THREE.Scene();
-    console.log(window.innerWidth, window.innerHeight);
     // Use the card's dimensions instead of fixed window fractions
     const cardElement = document.getElementById(displayName);
     let width = cardElement.clientWidth;
@@ -20,7 +19,7 @@ export function initScene(displayName, renderer, camera) {
     camera.aspect = width / height;
     camera.near = 0.1;
     camera.far = 1000;
-    camera.position.set(0.42, 0, 0); // Position camera away from the origin
+    camera.position.set(0, 0, 5); // Position camera away from the origin
     camera.lookAt(0, 0, 0); // Make camera look at the origin
     camera.updateProjectionMatrix();
     

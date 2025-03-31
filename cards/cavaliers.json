@@ -1,0 +1,138 @@
+[
+    {
+        "nom": "Charly",
+        "titre": "l'élégant",
+        "description": "Sur de dos de son cheval roux, on raconte qu'un seul sourire de sa part suffit pour charmer n'importe quelle demoiselle.",
+        "charisme": 130,
+        "bonus_vitesse": 20,
+        "bonus_acceleration": 0,
+        "nationalite": "France",
+        "rarete": 2,
+        "glb_path": "Charly.glb"
+    },
+    {
+        "nom": "Gaston",
+        "titre": "le cavalier du granit",
+        "description": "Champion du tour de l'horloge, on dit qu'il est capable de concourir à n'importe quelle heure...à condition d'accepter les retards",
+        "charisme": 60,
+        "bonus_vitesse": 10,
+        "bonus_acceleration": 60,
+        "nationalite": "Finlande",
+        "rarete": 0,
+        "glb_path": "Gaston.glb"
+    },
+    {
+        "nom": "Maxime",
+        "titre": "le cavalier de la mogette",
+        "description": "Fier défenseur de son pays, il se bat pour limiter l'invasion parisienne.",
+        "charisme": 50,
+        "bonus_vitesse": 40,
+        "bonus_acceleration": 40,
+        "nationalite": "Vendéen",
+        "rarete": 0,
+        "glb_path": "Maxime.glb"
+    },
+    {
+        "nom": "Guillaume",
+        "titre": "l'éclair procrastinateur",
+        "description": "Cavalier indétrônable, aucun cheval ne lui résiste... attention à ce qu'il ne chevauche pas sur le votre ! Sa seule faiblesse connue à ce jour est son abstention aux tournois qui commencent à l’aube.",
+        "charisme": 150,
+        "bonus_vitesse": 1,
+        "bonus_acceleration": 1,
+        "decouverte": 1,
+        "nationalite": "France",
+        "rarete": 3,
+        "glb_path": "Guillaume.glb"
+    },
+    {
+        "nom": "Leo",
+        "titre": "l'infatigable",
+        "description": "Descendant direct de l'étalon, son physique lui permet de prouesses fabuleuses.",
+        "charisme": 20,
+        "bonus_vitesse": 60,
+        "bonus_acceleration": 60,
+        "nationalite": "Kenya",
+        "rarete": 0,
+        "glb_path": "Leo.glb"
+    },
+    {
+        "nom": "Theo",
+        "titre": "la force tranquille",
+        "description": "Ne vous faites pas avoir par son attitude détendue, chaque action est maîtrisée à la perfection...à condition d'en faire qu'une.",
+        "charisme": 40,
+        "bonus_vitesse": 110,
+        "bonus_acceleration": -20,
+        "nationalite": "Grèce",
+        "rarete": 0,
+        "glb_path": "Theo.glb"
+    },
+    {
+        "nom": "Antoine",
+        "titre": "l'hybride",
+        "description": "D'origine plus tôt étrange, prenez garde, il va essayer de vous impressionner avec sa culture.",
+        "charisme": 90,
+        "bonus_vitesse": 0,
+        "bonus_acceleration": 0,
+        "decouverte": 15,
+        "nationalite": "Vietnam",
+        "rarete": 0,
+        "glb_path": "Antoine.glb"
+    },
+    {
+        "nom": "Dorian",
+        "titre": "le fougueux",
+        "description": "Un cavalier de valeur qui répond à n'importe quel appel. Un conseil si vous le cherchez sur le champ de bataille, tendez l’oreille et dirigez vous vers les claquements de dents.",
+        "charisme": 100,
+        "bonus_vitesse": 10,
+        "bonus_acceleration": 30,
+        "nationalite": "Lituanie",
+        "rarete": 0,
+        "glb_path": "Dorian.glb"
+    },
+    {
+        "nom": "Kilian",
+        "titre": "le chevaucheur de ratels",
+        "description": "Ce qu'on peut raconter en tout bien tout honneur, c'est qu'il ne faut pas le déranger. Homme à multiple talent, il maîtrise aussi bien les arts martiaux que la cuisine ou la bétonnière.",
+        "charisme": 90,
+        "bonus_vitesse": 25,
+        "bonus_acceleration": 25,
+        "nationalite": "Portugal",
+        "rarete": 1,
+        "glb_path": "Kilian.glb"
+    },
+    {
+        "nom": "Nolann Kermarrec",
+        "titre": "le géant breton",
+        "description": "Né d’une liaison d’un homme et d’une géante, il est de notoriété publique que son talent est indéniable, cependant son plus gros défi à ce jour est de trouver un cheval à sa taille.",
+        "charisme": 110,
+        "bonus_vitesse": -40,
+        "bonus_acceleration": 50,
+        "nationalite": "Breton",
+        "rarete": 1,
+        "glb_path": "Nolann Kermarrec.glb"
+    },
+    {
+        "nom": "Wael",
+        "titre": "l’inébranlable",
+        "description": "Venu d’un contrée lointaine afin de d’affronter les meilleurs cavaliers du monde, on dit qu’il est capable de concourir dans n’importe quelle conditions météorologiques.",
+        "charisme": 90,
+        "bonus_vitesse": 10,
+        "bonus_acceleration": 10,
+        "decouverte": 5,
+        "nationalite": "Liban",
+        "rarete": 2,
+        "glb_path": "Wael.glb"
+    },
+    {
+        "nom": "Hugo",
+        "titre": "le cavalier-barde",
+        "description": "Musicien et cavalier de père en fils, il s’est cependant dirigé vers une nouvelle activité plus lucrative : le poker. On raconte qu’il aurait de quoi s’acheter une tour Eiffel personnelle.",
+        "charisme": 70,
+        "bonus_vitesse": 0,
+        "bonus_acceleration": 40,
+        "decouverte": 10,
+        "nationalite": "Australie",
+        "rarete": 1,
+        "glb_path": "Hugo.glb"
+    }
+]

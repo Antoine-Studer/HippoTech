@@ -4,7 +4,9 @@
   "description": "A fun little game about horses",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",             
+    "build": "vite build",    
+    "start": "node server.js"   
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +14,9 @@
     "express": "^4.21.2",
     "pg": "^8.13.3",
     "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^6.0.2",
+    "vite": "^6.2.4"
   }
 }

@@ -1,18 +1,20 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-export function loadModels(scene) {
-    loadCard(scene);
+export function loadModels(scene, models) {
+    for (let i = 0; i < models.length; i++) {
+        loadCard(scene, models[i]);
+    }
 }
 
-function loadCard(scene){
+export function loadCard(scene, model) {
     const loader = new GLTFLoader();
     
     // Show a loading message in console
     console.log('Loading 3D model...');
     
     loader.load(
-        './assets/pokemon_card_3d.glb', // Updated path - ensure this file exists
+        './assets/' + model, // Updated path - ensure this file exists
         function(gltf){
             const card = gltf.scene;
             
@@ -24,6 +26,7 @@ function loadCard(scene){
             
             // Success message
             console.log('Model successfully loaded and added to scene!');
+            console.log(card.position);
 
         },
         // called while loading is progressing
