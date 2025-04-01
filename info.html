@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Information</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .card-info {
+            display: flex;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card-display {
+            height: 100vh;
+            width: 50vw;
+            margin: 0 auto;
+        }
+        .stats {
+            margin-top: 20px;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-info">
+        <button id="backBtn" class="back-button">Back to Collection</button>
+        <div id="cardDisplay" class="card-display"></div>
+        <div id="cardStats" class="stats">
+        <h1 id="cardTitle">Loading card information...</h1>
+        </div>
+    </div>
+
+    <script type="module" src="src/info.js"></script>
+</body>
+</html>

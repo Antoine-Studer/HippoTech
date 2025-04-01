@@ -9,20 +9,24 @@ const lastBoosterOpenTime = new Map(); // Track when each user last opened a boo
 // Serve static files (HTML, CSS, JS)
 app.use(express.json()); // For parsing JSON requests
 
+
 // Card data
-const cardProperties = [
-    { 
-        name: "Ganador Cel",
-        glb_path: "ganador_right_pos.glb",
-        rarity: "legendary"
-    }
+const cavaliersProperties = [
+    ...require('./cards/cavaliers.json')
+];
+const chevauxProperties = [
+    ...require('./cards/chevaux.json')
+];
+const cardsProperties = [
+    ...cavaliersProperties,
+    ...chevauxProperties
 ];
 
 let collection = [];
 
 function getRandomCard() {
-    const randomIndex = Math.floor(Math.random() * cardProperties.length);
-    return cardProperties[randomIndex];
+    const randomIndex = Math.floor(Math.random() * cardsProperties.length);
+    return cardsProperties[randomIndex];
 }
 
 app.get('/api/open-booster', (req, res) => {
@@ -84,6 +88,18 @@ app.get('/api/cooldown-status', (req, res) => {
         canOpen: true,
         message: "You can open a booster pack now"
     });
+});
+
+app.get('/api/all-riders', (req, res) => {
+    res.json(cavaliersProperties);
+});
+
+app.get('/api/all-horses', (req, res) => {
+    res.json(chevauxProperties);
+});
+
+app.get('/api/all-cards', (req, res) => {
+    res.json(cardsProperties);
 });
 
 app.use(express.static(__dirname));

@@ -26,7 +26,6 @@ export function loadCard(scene, model) {
             
             // Success message
             console.log('Model successfully loaded and added to scene!');
-            console.log(card.position);
 
         },
         // called while loading is progressing
