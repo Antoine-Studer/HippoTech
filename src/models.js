@@ -3,11 +3,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export function loadModels(scene, models) {
     for (let i = 0; i < models.length; i++) {
-        loadCard(scene, models[i]);
+        loadCard(scene, models[i], { x: 0, y: 0, z: i * 0.04 });
     }
 }
 
-export function loadCard(scene, model) {
+export function loadCard(scene, model, position = { x: 0, y: 0, z: 0 }) {
     const loader = new GLTFLoader();
     
     // Show a loading message in console
@@ -21,7 +21,7 @@ export function loadCard(scene, model) {
             // Scale the model if needed (uncomment if model is too small/large)
             // card.scale.set(0.5, 0.5, 0.5);
             
-            card.position.set(0, 0, 0);
+            card.position.set(position.x, position.y, position.z);
             scene.add(card);
             
             // Success message

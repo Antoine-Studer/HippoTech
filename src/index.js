@@ -58,78 +58,8 @@ async function checkCooldownStatus() {
     }
 }
 
-function displayCards(cards) {
-    cardDisplay.innerHTML = "";
-    cards.forEach(card => {
-        const cardElement = document.createElement("div");
-        cardElement.classList.add("card", card.rarity);
-        
-        // Create the HTML for stats bars
-        let statsHTML = '';
-        for (const [stat, value] of Object.entries(card.stats)) {
-            const statName = stat.charAt(0).toUpperCase() + stat.slice(1);
-            statsHTML += `
-                <div class="stat-row">
-                    <span class="stat-name">${statName}</span>
-                    <div class="stat-bar-container">
-                        <div class="stat-bar" style="width: ${value}%"></div>
-                    </div>
-                    <span class="stat-value">${value}</span>
-                </div>
-            `;
-        }
-        
-        cardElement.innerHTML = `
-            <div class="img-div"> <img class="card-image" src="${card.img}" /> </div>
-            <div class="card-name">${card.name}</div>
-            <div class="card-type">${card.type}</div>
-            <div class="card-rarity">${card.rarity.toUpperCase()}</div>
-            <div class="card-stats">
-                ${statsHTML}
-            </div>
-        `;
-        cardDisplay.appendChild(cardElement);
-    });
-}
 
-document.getElementById("openBoosterBtn").addEventListener("click", async () => {
-    try {
-        const response = await fetch('/api/open-booster');
-        if (response.status === 429) {
-            // If we hit the rate limit, check and display cooldown
-            checkCooldownStatus();
-            return;
-        }
-        
-        const booster = await response.json();
-        
-        // Show cards and hide other elements
-        const mainContent = document.querySelectorAll('body > :not(#cardDisplay):not(#continueBtn):not(#cooldownDisplay)');
-        mainContent.forEach(element => element.classList.add('hidden'));
-        
-        // Display cards
-        displayCards(booster);
-        cardDisplay.classList.remove('hidden');
-        cardDisplay.classList.add('show');
-        
-        // Show continue button
-        const continueBtn = document.getElementById('continueBtn') || document.createElement('button');
-        if (!continueBtn.id) {
-            continueBtn.id = 'continueBtn';
-            continueBtn.textContent = 'Continue';
-            document.body.appendChild(continueBtn);
-        }
-        
-        setTimeout(() => {
-            continueBtn.style.display = 'block';
-        }, 500);
-        
-        // After opening a booster, check cooldown status
-        checkCooldownStatus();
-    } catch (error) {
-        console.error("Error opening booster:", error);
-    }
-});
+
 
 // Create and add continue button if it doesn't exist
 function ensureContinueButtonExists() {
