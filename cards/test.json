@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Maxime",
+        "title": "le chevalier de la mogette",
+        "description": "Fier défenseur de son pays, il se bat pour limiter l'invasion parisienne.",
+        "charisma": 50,
+        "speed_bonus": 40,
+        "acceleration_bonus": 40,
+        "nationality": "Vendéen",
+        "rarity": 0,
+        "glb_path": "Maxime.glb"
+    }
+]

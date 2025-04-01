@@ -10,23 +10,27 @@ const lastBoosterOpenTime = new Map(); // Track when each user last opened a boo
 app.use(express.json()); // For parsing JSON requests
 
 
-// Card data
-const cavaliersProperties = [
-    ...require('./cards/cavaliers.json')
+const testProperties = [
+    ...require('./cards/test.json')
 ];
-const chevauxProperties = [
-    ...require('./cards/chevaux.json')
+// Card data
+const ridersProperties = [
+    ...require('./cards/riders.json')
+];
+const horsesProperties = [
+    ...require('./cards/horses.json')
 ];
 const cardsProperties = [
-    ...cavaliersProperties,
-    ...chevauxProperties
+    ...ridersProperties,
+    ...horsesProperties
 ];
+
 
 let collection = [];
 
-function getRandomCard() {
-    const randomIndex = Math.floor(Math.random() * cardsProperties.length);
-    return cardsProperties[randomIndex];
+function getRandomCard(propreties = cardsProperties) {
+    const randomIndex = Math.floor(Math.random() * propreties.length);
+    return propreties[randomIndex];
 }
 
 app.get('/api/open-booster', (req, res) => {
@@ -51,7 +55,7 @@ app.get('/api/open-booster', (req, res) => {
     
     const boosterPack = [];
     for (let i = 0; i < 5; i++) {
-        const card = getRandomCard();
+        const card = getRandomCard(testProperties);
         boosterPack.push(card);
         collection.push(card);
     }
@@ -91,11 +95,11 @@ app.get('/api/cooldown-status', (req, res) => {
 });
 
 app.get('/api/all-riders', (req, res) => {
-    res.json(cavaliersProperties);
+    res.json(ridersProperties);
 });
 
 app.get('/api/all-horses', (req, res) => {
-    res.json(chevauxProperties);
+    res.json(horsesProperties);
 });
 
 app.get('/api/all-cards', (req, res) => {

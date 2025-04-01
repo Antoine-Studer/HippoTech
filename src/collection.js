@@ -3,13 +3,12 @@ import {initScene} from './scene.js';
 import {loadCard} from './models.js';
 import { createControls } from './controls.js';
 
-
-
 // Arrays to store renderers, cameras, and controls
 let renderers = [];
 let cameras = [];
 let controls_array = [];
 let scenes = [];
+
 
 
 function displayCollection(collection, all_riders) {
@@ -27,13 +26,13 @@ function displayCollection(collection, all_riders) {
         cardDiv.appendChild(cardRenderContainer);
         
         // Add info button for cards that are in the collection
-        if (collection.some(card => card.nom === all_riders[i].nom)) {
+        if (collection.some(card => card.name === all_riders[i].name)) {
             const infoButton = document.createElement('button');
             infoButton.textContent = 'View Details';
             infoButton.className = 'info-button';
             
             // Store the card name in a data attribute to avoid closure issues
-            infoButton.dataset.cardName = all_riders[i].nom;
+            infoButton.dataset.cardName = all_riders[i].name;
             
             // Use a more direct event handler
             infoButton.onclick = function() {
@@ -64,9 +63,9 @@ function displayCollection(collection, all_riders) {
         // Create controls
         const control = createControls(camera, renderer);
         controls_array.push(control);
-        if (collection.some(card => card.nom === all_riders[i].nom)) {
+        if (collection.some(card => card.name === all_riders[i].name)) {
             console.log("in collection");
-            //loadCard(scene, 'Maxime.glb');
+            console.log(all_riders[i].glb_path);
             loadCard(scene, all_riders[i].glb_path);
         } else {
             loadCard(scene, 'Unknown.glb');

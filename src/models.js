@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-export function loadModels(scene, models) {
+export function loadModels(scene, models, cardModelsArray = []) {
     for (let i = 0; i < models.length; i++) {
-        loadCard(scene, models[i]);
+        loadCard(scene, models[i], { x: 0, y: 0, z: i * 0.04 }, cardModelsArray);
     }
 }
 
-export function loadCard(scene, model) {
+export function loadCard(scene, model, position = { x: 0, y: 0, z: 0 }, cardModelsArray = []) {
     const loader = new GLTFLoader();
     
     // Show a loading message in console
@@ -21,12 +21,14 @@ export function loadCard(scene, model) {
             // Scale the model if needed (uncomment if model is too small/large)
             // card.scale.set(0.5, 0.5, 0.5);
             
-            card.position.set(0, 0, 0);
+            card.position.set(position.x, position.y, position.z);
             scene.add(card);
+            
+            // Store reference to the card in the provided array
+            if (cardModelsArray) cardModelsArray.push(card);
             
             // Success message
             console.log('Model successfully loaded and added to scene!');
-
         },
         // called while loading is progressing
         function ( xhr ) {
@@ -40,6 +42,9 @@ export function loadCard(scene, model) {
             const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
             const errorCube = new THREE.Mesh(geometry, material);
             scene.add(errorCube);
+            
+            // Store reference to the error cube
+            if (cardModelsArray) cardModelsArray.push(errorCube);
         }
     );
 }

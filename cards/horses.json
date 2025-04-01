@@ -1,0 +1,121 @@
+[
+  {
+    "name": "Tempête",
+    "title": "le cheval divin",
+    "description": "Le cheval parfait… à condition de pouvoir le monter. La légende raconte que certains l’on déjà vu voler.",
+    "charisma": 150,
+    "max_speed": 150,
+    "acceleration": 100,
+    "glb_path": "Tempete.glb",
+    "rarity": 3
+  },
+  {
+    "name": "RouxCarnage",
+    "title": "le destrier fidèle",
+    "description": "Ce magnifique destrier à un seul et unique maître à qui il a voué sa loyauté.",
+    "charisma": 130,
+    "max_speed": 100,
+    "acceleration": 130,
+    "coat_color": "roux / cheveux roux",
+    "glb_path": "RouxCarnage.glb",
+    "rarity": 2
+  },
+  {
+    "name": "Roquefort",
+    "title": "le puissant",
+    "description": "Ce destrier a été dressé par les géants dans les montagnes du Nord. Il est tristement célèbre pour sa combativité, attention à ne pas vous faire désarçonner.",
+    "charisma": 110,
+    "max_speed": 130,
+    "acceleration": 80,
+    "glb_path": "Roquefort.glb",
+    "rarity": 2
+  },
+  {
+    "name": "Beato",
+    "title": "le grand sabot",
+    "description": "Destrier d'exception, il se démarque au combat par son courage et sa détermination. Il saura toujours vous surprendre, il suffit de lui donner à boire.",
+    "charisma": 100,
+    "max_speed": 100,
+    "acceleration": 100,
+    "glb_path": "Beato.glb",
+    "rarity": 1
+  },
+  {
+    "name": "Mirage",
+    "title": "l’intangible",
+    "description": "Ce destrier d’origine inconnue suscite beaucoup de curiosité parmi le public. N’essayez pas de le rattraper pour en savoir plus, il disparaît sans laisser de trace.",
+    "charisma": 90,
+    "max_speed": 70,
+    "acceleration": 120,
+    "glb_path": "Mirage.glb",
+    "rarity": 1
+  },
+  {
+    "name": "Tytoo",
+    "title": "le destrier fonceur",
+    "description": "Même s’il paraît lent au départ méfiez vous, une fois lancé il est inarrêtable semant le désordre sur son passage.",
+    "charisma": 70,
+    "max_speed": 150,
+    "acceleration": 20,
+    "glb_path": "Tytoo.glb",
+    "rarity": 0
+  },
+  {
+    "name": "Alzephyr",
+    "title": "le sage",
+    "description": "Jadis ce cheval appartenait à un vagabond, on raconte que ce cheval a visité plus de contrées que n’importe quel homme. Il n’est plus dans la force de l'âge mais il reste cependant un bon canasson.",
+    "charisma": 90,
+    "max_speed": 110,
+    "acceleration": 80,
+    "glb_path": "Alzephyr.glb",
+    "rarity": 0
+  },
+  {
+    "name": "Canasson n°1104",
+    "description": "Cheval né pour la course, il est ni mauvais ni exceptionnel. Guidé par un bon cavalier, il devient un destrier fatal.",
+    "charisma": 60,
+    "max_speed": 100,
+    "acceleration": 60,
+    "glb_path": "Canasson1104.glb",
+    "rarity": 1
+  },
+  {
+    "name": "Canasson n°1808",
+    "description": "Ami du numéro 1104, il est lui aussi à la recherche d’un titre qui lui permettrait d'ouvrir le compteur. Son meilleur palmarès est 5 secondes derrière le premier.",
+    "charisma": 50,
+    "max_speed": 60,
+    "acceleration": 90,
+    "glb_path": "Canasson1808.glb",
+    "rarity": 0
+  },
+  {
+    "name": "Olive",
+    "title": "la brise d’Egée",
+    "description": "Adepte de la tranquillité et du calme, c’est un cheval indépendant cependant vous ne pourrez pas la repousser dans ses retranchements, elle s'arrêtera avant.",
+    "charisma": 40,
+    "max_speed": 70,
+    "acceleration": 70,
+    "glb_path": "Olive.glb",
+    "rarity": 0
+  },
+  {
+    "name": "Marguerite",
+    "title": "l’incomprise",
+    "description": "Envoyée dans la course à son insu, elle se retrouve toujours avec les pires cavaliers. Vous voyez bien que c’est pas un cheval non ?",
+    "charisma": 20,
+    "max_speed": 80,
+    "acceleration": 40,
+    "glb_path": "Marguerite.glb",
+    "rarity": 0
+  },
+  {
+    "name": "Volt",
+    "title": "le condensateur",
+    "description": "Connu pour son accélération hors du commun, attention à ne pas le perdre des yeux, heureusement il se fatigue vite.",
+    "charisma": 80,
+    "max_speed": 40,
+    "acceleration": 140,
+    "glb_path": "Volt.glb",
+    "rarity": 0
+  }
+]

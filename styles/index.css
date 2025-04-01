@@ -103,12 +103,7 @@ h2 {
 }
 
 #cardDisplay {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 200px;
-    max-width: 1000px;
+    height: 100vw;
 }
 
 #cardDisplay.hidden {
@@ -297,10 +292,6 @@ h2 {
     margin-top: 10px;
 }
 
-.hidden {
-    display: none;
-}
-
 #continueBtn {
     padding: 15px 30px;
     font-size: 18px;
@@ -318,4 +309,12 @@ h2 {
 
 #continueBtn:hover {
     background-color: #A0522D;
+}
+
+.hidden {
+    display: none;
+}
+.show {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out forwards;
 }

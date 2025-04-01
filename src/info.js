@@ -20,7 +20,7 @@ async function fetchCardInfo() {
         const allRiders = await response.json();
         
         // Find the card with matching name
-        const card = allRiders.find(rider => rider.nom === cardName);
+        const card = allRiders.find(rider => rider.name === cardName);
         
         if (card) {
             displayCardInfo(card);
@@ -35,7 +35,7 @@ async function fetchCardInfo() {
 
 function displayCardInfo(card) {
     // Update page title
-    document.getElementById('cardTitle').textContent = card.nom;
+    document.getElementById('cardTitle').textContent = card.name;
     
     // Setup 3D rendering
     const cardDisplay = document.getElementById('cardDisplay');
@@ -59,7 +59,7 @@ function displayCardInfo(card) {
     
     // Add card name with styling
     const nameElement = document.createElement('h2');
-    nameElement.textContent = card.nom;
+    nameElement.textContent = card.name;
     statsElement.appendChild(nameElement);
     
     // Add card rarity if available
