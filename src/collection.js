@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {initScene} from './scene.js';
-import {loadCard} from './models.js';
+import {loadCard, shaderMaterials, shaderClock} from './models.js';
 import { createControls } from './controls.js';
 
 // Arrays to store renderers, cameras, and controls
@@ -8,8 +8,6 @@ let renderers = [];
 let cameras = [];
 let controls_array = [];
 let scenes = [];
-
-
 
 function displayCollection(collection, all_riders) {
     const collectionDisplay = document.getElementById('collectionDisplay');
@@ -92,9 +90,14 @@ async function getAllHorses() {
         .catch(error => console.error('Error fetching all horses:', error));
 }
 
-
 function animate(nb_cards) {
     requestAnimationFrame(() => animate(nb_cards));
+
+    // Update all shader materials with the current time
+    const elapsedTime = shaderClock.getElapsedTime();
+    for (let material of shaderMaterials) {
+        material.uniforms.iTime.value = elapsedTime;
+    }
 
     // Render all cards only if renderers are defined
     for (let i = 0; i < nb_cards; i++) {
@@ -149,7 +152,13 @@ if (window.location.pathname.startsWith('/collection.html')) {
             let nb_cards = all_riders.length;
             
             displayCollection(collection, all_riders);
-            setTimeout(() => animate(nb_cards), 0);
+            
+            // Add a small delay to ensure everything is initialized
+            setTimeout(() => {
+                console.log("Starting animation loop with", nb_cards, "cards");
+                console.log("Shader materials to update:", shaderMaterials.length);
+                animate(nb_cards);
+            }, 500); // Slightly longer delay to ensure models are loaded
         })
         .catch(error => console.error('Error fetching data:', error));
 }

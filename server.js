@@ -55,7 +55,7 @@ app.get('/api/open-booster', (req, res) => {
     
     const boosterPack = [];
     for (let i = 0; i < 5; i++) {
-        const card = getRandomCard(testProperties);
+        const card = getRandomCard();
         boosterPack.push(card);
         collection.push(card);
     }
