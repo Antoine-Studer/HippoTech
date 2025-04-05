@@ -1,5 +1,16 @@
 [
     {
+        "name": "Charly",
+        "title": "l'élégant",
+        "description": "Sur de dos de son cheval roux, on raconte qu'un seul sourire de sa part suffit pour charmer n'importe quelle demoiselle.",
+        "charisma": 130,
+        "speed_bonus": 20,
+        "acceleration_bonus": 0,
+        "nationality": "France",
+        "rarity": 2,
+        "glb_path": "Charly.glb"
+    },
+    {
         "name": "Maxime",
         "title": "le chevalier de la mogette",
         "description": "Fier défenseur de son pays, il se bat pour limiter l'invasion parisienne.",
