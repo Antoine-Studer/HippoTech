@@ -30,6 +30,10 @@ export function initScene(displayName, renderer, camera) {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
+
+    const backlight = new THREE.DirectionalLight(0xffffff, 5);
+    backlight.position.set(5, -10, -7.5);
+    scene.add(backlight);
     
     // Handle window resize
     window.addEventListener('resize', () => {
