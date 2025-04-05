@@ -4,14 +4,16 @@
   "description": "A fun little game about horses",
   "main": "server.js",
   "scripts": {
-    "dev": "vite",             
-    "build": "vite build",    
-    "start": "node server.js"   
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^4.21.2",
+    "express-validator": "^7.2.1",
     "pg": "^8.13.3",
     "three": "^0.174.0"
   },

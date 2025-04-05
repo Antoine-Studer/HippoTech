@@ -9,6 +9,94 @@ const lastBoosterOpenTime = new Map(); // Track when each user last opened a boo
 // Serve static files (HTML, CSS, JS)
 app.use(express.json()); // For parsing JSON requests
 
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'hippotech',
+    password: 'admin', // Changed from empty string to null for no password
+    port: 5432,
+});
+
+// Test database connection at startup
+pool.query('SELECT NOW()', (err, res) => {
+    if (err) {
+        console.error('Database connection error:', err.message);
+    } else {
+        console.log('Database connected successfully');
+        
+        // Create users table if it doesn't exist
+        pool.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(100) UNIQUE NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                password_hash VARCHAR(255) NOT NULL
+            )
+        `).catch(err => console.error('Error creating users table:', err));
+    }
+});
+
+const bcrypt = require('bcrypt');
+const { body, validationResult } = require('express-validator');
+
+app.post('/api/signup', 
+    [
+        body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long'),
+        body('email').isEmail().withMessage('Invalid email address'),
+        body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { username, email, password } = req.body;
+        console.log('Signup attempt:', { username, email });
+
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const result = await pool.query(
+                'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id',
+                [username, email, hashedPassword]
+            );
+            console.log('User registered successfully:', result.rows[0].id);
+            res.status(201).json({ message: 'User registered successfully', userId: result.rows[0].id });
+        } catch (err) {
+            console.error('Signup error details:', err);
+            if (err.code === '23505') { // Unique constraint violation
+                res.status(400).json({ error: 'Username or email already exists' });
+            } else {
+                res.status(500).json({ error: 'Internal server error: ' + (err.message || 'Unknown error') });
+            }
+        }
+    }
+);
+
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ error: 'Invalid email' });
+        }
+
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Invalid password' });
+        }
+
+        res.json({ message: 'Login successful', userId: user.id });
+    } catch (err) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 const testProperties = [
     ...require('./cards/test.json')
