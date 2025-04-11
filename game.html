@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <!-- Pause Menu -->
+    <div id="pauseMenu" class="pause-menu">
+        <h2>Game Paused</h2>
+        <button id="resumeButton">Resume</button>
+        <button id="mainMenuButton">Main Menu</button>
+    </div>
+
+    <!-- Game Over Menu -->
+    <div id="gameOverMenu" class="pause-menu">
+        <h2>Game Over</h2>
+        <p id="finalScore">Score: 0</p>
+        <p id="jumpCount">Jumps: 0</p>
+        <button id="restartButton">Restart</button>
+        <button id="mainMenuButtonGameOver">Main Menu</button>
+    </div>
+
+    <!-- Win Menu -->
+    <div id="winMenu" class="pause-menu" style="display: none;">
+        <h2>You Win!</h2>
+        <p id="finishTime">Time: 0s</p>
+        <p id="finalScoreWin">Score: 0</p>
+        <button id="restartButtonWin">Play Again</button>
+        <button id="mainMenuButtonWin">Main Menu</button>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Rider and Horse</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Select Your Rider and Horse</h1>
+        
+        <div class="selection-container">
+            <div class="selection-column">
+                <h2>Riders</h2>
+                <div class="selection-grid">
+                    <!-- Character buttons will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="selection-column">
+                <h2>Horses</h2>
+                <div class="selection-grid">
+                    <!-- Horse buttons will be inserted here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-panel">
+            <h2>Racing Stats</h2>
+            
+            <div id="incompatibleMessage" class="incompatible" style="display: none;"></div>
+            
+            <div class="stat-container">
+                <label>Speed <span id="speedValue">100</span></label>
+                <div class="stat-bar">
+                    <div id="speedBar" class="stat-fill" style="width: 50%;"></div>
+                </div>
+                <div id="speedCalc" class="calculation"></div>
+            </div>
+            
+            <div class="stat-container">
+                <label>Acceleration <span id="accelValue">100</span></label>
+                <div class="stat-bar">
+                    <div id="accelBar" class="stat-fill" style="width: 50%;"></div>
+                </div>
+                <div id="accelCalc" class="calculation"></div>
+            </div>
+            
+            <div class="stat-container">
+                <label>Shield Chance <span id="shieldValue">25%</span></label>
+                <div class="stat-bar">
+                    <div id="shieldBar" class="stat-fill" style="width: 25%;"></div>
+                </div>
+                <div id="shieldCalc" class="calculation"></div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button id="startButton" class="start-button">Begin Race</button>
+            <button id="backButton" class="back-button">Back to Main</button>
+        </div>
+    </div>
+    
+    <script src="js/stats.js"></script>
+    <script>
+        // Generate character buttons
+        const characterGrid = document.querySelector('.selection-column:nth-child(1) .selection-grid');
+        for (const [id, character] of Object.entries(CHARACTERS)) {
+            const button = document.createElement('button');
+            button.className = 'selection-button';
+            button.dataset.id = id;
+            button.dataset.type = 'character';
+            button.textContent = character.name;
+            button.addEventListener('click', selectItem);
+            characterGrid.appendChild(button);
+        }
+        
+        // Generate horse buttons
+        const horseGrid = document.querySelector('.selection-column:nth-child(2) .selection-grid');
+        for (const [id, horse] of Object.entries(HORSES)) {
+            const button = document.createElement('button');
+            button.className = 'selection-button';
+            button.dataset.id = id;
+            button.dataset.type = 'horse';
+            button.textContent = horse.name;
+            button.addEventListener('click', selectItem);
+            horseGrid.appendChild(button);
+        }
+        
+        let selectedCharacter = localStorage.getItem('selectedCharacter') || null;
+        let selectedHorse = localStorage.getItem('selectedHorse') || null;
+        
+        // Mark previously selected items
+        if (selectedCharacter) {
+            const characterButton = document.querySelector(`.selection-button[data-id="${selectedCharacter}"]`);
+            if (characterButton) characterButton.classList.add('selected');
+        }
+        
+        if (selectedHorse) {
+            const horseButton = document.querySelector(`.selection-button[data-id="${selectedHorse}"]`);
+            if (horseButton) horseButton.classList.add('selected');
+        }
+        
+        // Update stats initially
+        updateStats();
+        
+        function selectItem(e) {
+            const type = e.target.dataset.type;
+            const id = e.target.dataset.id;
+            
+            // Update selection
+            if (type === 'character') {
+                // Clear previous selection
+                document.querySelectorAll('.selection-column:nth-child(1) .selection-button.selected').forEach(
+                    button => button.classList.remove('selected')
+                );
+                selectedCharacter = id;
+            } else {
+                // Clear previous selection
+                document.querySelectorAll('.selection-column:nth-child(2) .selection-button.selected').forEach(
+                    button => button.classList.remove('selected')
+                );
+                selectedHorse = id;
+            }
+            
+            // Mark this button as selected
+            e.target.classList.add('selected');
+            
+            // Update stats display
+            updateStats();
+        }
+        
+        function updateStats() {
+            const stats = calculateStats(selectedCharacter, selectedHorse);
+            
+            // Update compatibility message
+            const incompatibleMessage = document.getElementById('incompatibleMessage');
+            if (!stats.compatible) {
+                incompatibleMessage.textContent = stats.message;
+                incompatibleMessage.style.display = 'block';
+                document.getElementById('startButton').disabled = true;
+            } else {
+                incompatibleMessage.style.display = 'none';
+                document.getElementById('startButton').disabled = false;
+            }
+            
+            // Update stat bars and values
+            document.getElementById('speedBar').style.width = `${stats.display.maxSpeed}%`;
+            document.getElementById('speedValue').textContent = `${stats.display.maxSpeed.toFixed(1)}`;
+            document.getElementById('speedCalc').textContent = stats.calculations.maxSpeed;
+            
+            document.getElementById('accelBar').style.width = `${stats.display.acceleration}%`;
+            document.getElementById('accelValue').textContent = `${stats.display.acceleration.toFixed(1)}`;
+            document.getElementById('accelCalc').textContent = stats.calculations.acceleration;
+            
+            document.getElementById('shieldBar').style.width = `${stats.display.shieldChance}%`;
+            document.getElementById('shieldValue').textContent = `${stats.display.shieldChance.toFixed(1)}%`;
+            document.getElementById('shieldCalc').textContent = stats.calculations.shieldChance;
+        }
+        
+        // Start button logic
+        document.getElementById('startButton').addEventListener('click', function() {
+            // Store selections in localStorage
+            localStorage.setItem('selectedCharacter', selectedCharacter);
+            localStorage.setItem('selectedHorse', selectedHorse);
+            
+            // Store calculated in-game stats
+            const stats = calculateStats(selectedCharacter, selectedHorse);
+            localStorage.setItem('playerStats', JSON.stringify(stats.game));
+            
+            // Redirect to game
+            window.location.href = 'game.html';
+        });
+        
+        // Back button logic
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
