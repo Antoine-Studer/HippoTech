@@ -153,18 +153,39 @@ function animate() {
     }
 }
 
-document.getElementById('openBoosterBtn').addEventListener('click', function() {
+async function getUser() {
+    return fetch('/api/get-user')
+        .then(response => response.json())
+        .catch(error => console.error('Error fetching user:', error));
+}
+
+document.getElementById('openBoosterBtn').addEventListener('click', async function() {
+    const userObj = await getUser();
+    if (userObj.connected === false) {
+        alert('Please log in to open a booster pack.');
+        return;
+    }
+    
+    // Check cooldown status first
+    const cooldownStatus = await window.checkCooldownStatus();
+    
+    if (cooldownStatus && cooldownStatus.canOpen === false) {
+        // The cooldown timer will be updated by checkCooldownStatus
+        return;
+    }
+    
+    // Proceed with opening booster if cooldown allows
     document.getElementById('cardDisplay').classList.remove('hidden');
     document.getElementById('cardDisplay').classList.add('show');
+    
     getBoosterCards().then(cards => {
         if (cards.canOpen !== false) {
             createBooster(cards);
             animate();
-        }
-        else {
+        } else {
             console.log('Cannot open booster:', cards);
+            window.updateCooldownTimer(cards.remainingTime);
         }
-            
     }).catch(error => {
         console.error('Error fetching booster cards:', error);
     });

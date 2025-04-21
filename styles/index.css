@@ -48,7 +48,7 @@ h2 {
     transform: scale(1.05);
 }
 
-#collectionBtn {
+.change-btn {
     padding: 15px 30px;
     font-size: 18px;
     background-color: #8B4513; /* Saddle brown color */
@@ -61,10 +61,18 @@ h2 {
     font-family: 'Rye', cursive;
     text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
     position: absolute;
-    bottom: 20px; /* Position the button at the bottom */
+    
+}
+#collectionBtn {
+    bottom: 50%; /* Position the button at the bottom */
+    right: 10px;
 }
 
-#collectionBtn:hover {
+#gameBtn {
+    bottom: 50%;
+    left: 10px;
+}
+.change-btn:hover {
     background-color: #A0522D; /* Sienna color */
     transform: scale(1.05);
 }
@@ -80,7 +88,7 @@ h2 {
 
 #cooldownDisplay {
     position: fixed;
-    top: 20px;
+    top: 70px;
     right: 20px;
     margin: 0;
     padding: 10px 15px;
@@ -102,214 +110,7 @@ h2 {
     font-weight: bold;
 }
 
-#cardDisplay {
-    height: 100vw;
-}
 
-#cardDisplay.hidden {
-    display: none;
-}
-
-@keyframes openBooster {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.show {
-    display: flex;
-    animation: openBooster 0.5s ease-in-out forwards;
-}
-
-.card {
-    width: 150px;
-    height: 200px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    transition: transform 0.3s;
-    position: relative; /* Needed for the pseudo-element */
-    overflow: hidden; /* Ensures the holographic shine stays within bounds */
-}
-
-/* Holographic effect using ::before pseudo-element */
-.card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        120deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 50%,
-        rgba(255, 255, 255, 0) 100%
-    );
-    opacity: 0.9;
-    transform: rotate(30deg);
-    transition: transform 0.5s ease;
-}
-
-/* Move the shine on hover */
-.card:hover::before {
-    transform: translateX(50%) rotate(30deg);
-}
-
-.card:hover {
-    transform: scale(1.05);
-}
-
-.card.common { border: 2px solid #666; }
-.card.rare { 
-    border: 2px solid #FF4500; /* Red color */
-    animation: rareShine 1.5s infinite;
-}
-.card.legendary { 
-    border: 2px solid #800080; /* Purple color */
-    animation: legendaryShine 1.5s infinite;
-}
-
-@keyframes rareShine {
-    0% {
-        box-shadow: 0 0 5px #FF4500;
-    }
-    50% {
-        box-shadow: 0 0 20px #FF4500;
-    }
-    100% {
-        box-shadow: 0 0 5px #FF4500;
-    }
-}
-
-@keyframes legendaryShine {
-    0% {
-        box-shadow: 0 0 10px #800080, 0 0 20px #800080, 0 0 30px #800080;
-    }
-    50% {
-        box-shadow: 0 0 40px #800080, 0 0 60px #800080, 0 0 80px #800080;
-    }
-    100% {
-        box-shadow: 0 0 10px #800080, 0 0 20px #800080, 0 0 30px #800080;
-    }
-}
-
-.card-name {
-    font-weight: bold;
-    margin-bottom: 5px;
-    text-align: center;
-    position: relative; /* Keeps text above the holographic layer */
-    z-index: 1; /* Ensures text stays on top */
-}
-
-.card-type {
-    font-style: italic;
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 5px;
-    position: relative;
-    z-index: 1;
-}
-
-.card-rarity {
-    font-size: 14px;
-    color: #555;
-    position: relative;
-    z-index: 1;
-    margin-bottom: 8px;
-}
-
-.card-stats {
-    width: 90%;
-    font-size: 12px;
-    position: relative;
-    z-index: 1;
-    margin-top: 5px;
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-}
-
-.stat-name {
-    width: 60px;
-    text-align: right;
-    padding-right: 5px;
-    font-size: 11px;
-}
-
-.stat-value {
-    width: 25px;
-    text-align: left;
-    padding-left: 5px;
-    font-size: 11px;
-}
-
-.stat-bar-container {
-    flex-grow: 1;
-    height: 8px;
-    background-color: #eee;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.stat-bar {
-    height: 100%;
-    background: linear-gradient(to right, #3498db, #2980b9);
-    border-radius: 4px;
-}
-
-/* Modify the rarity-specific stat bars */
-.rare .stat-bar {
-    background: linear-gradient(to right, #e74c3c, #c0392b);
-}
-
-.legendary .stat-bar {
-    background: linear-gradient(to right, #9b59b6, #8e44ad);
-}
-
-.card-rarity {
-    font-size: 14px;
-    color: #555;
-    position: relative;
-    z-index: 1;
-}
-
-.card-image {
-    width: 150px;
-    height: 150px;
-    margin-top: 10px;
-}
-
-#continueBtn {
-    padding: 15px 30px;
-    font-size: 18px;
-    background-color: #8B4513;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 20px;
-    display: none; /* Initially hidden */
-    font-family: 'Rye', cursive;
-    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
-}
-
-#continueBtn:hover {
-    background-color: #A0522D;
-}
 
 .hidden {
     display: none;
@@ -317,4 +118,58 @@ h2 {
 .show {
     display: block;
     animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #8B4513;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure header is above other elements */
+}
+
+.auth-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-right: 50px;
+}
+
+.auth-btn {
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-family: 'Rye', cursive;
+    text-shadow: 1px 1px #000;
+}
+
+#user {
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-family: 'Rye', cursive;
+    text-shadow: 1px 1px #000;
+}
+
+#cardDisplay {
+    height: 100%;
 }

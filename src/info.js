@@ -13,6 +13,13 @@ document.getElementById('cardTitle').textContent = cardName || 'Card Details';
 // Initialize 3D rendering
 let renderer, camera, scene, controls;
 
+const rarityNames = {
+    0: 'Commun',
+    1: 'Rare',
+    2: 'Épique',
+    3: 'Légendaire'
+}
+
 async function fetchCardInfo() {
     try {
         // Fetch all riders to find the specific one
@@ -35,7 +42,8 @@ async function fetchCardInfo() {
 
 function displayCardInfo(card) {
     // Update page title
-    document.getElementById('cardTitle').textContent = card.name;
+    document.getElementById('cardTitle').textContent = card.name + ', ' + card.title;
+    
     
     // Setup 3D rendering
     const cardDisplay = document.getElementById('cardDisplay');
@@ -59,25 +67,31 @@ function displayCardInfo(card) {
     
     // Add card name with styling
     const nameElement = document.createElement('h2');
-    nameElement.textContent = card.name;
+    nameElement.className = 'card-name';
+    nameElement.textContent = card.name + ', ' + card.title;
     statsElement.appendChild(nameElement);
     
     // Add card rarity if available
     if (card.rarity) {
         const rarityElement = document.createElement('p');
-        rarityElement.textContent = `Rarity: ${card.rarity}`;
+        rarityElement.className = 'card-rarity';
+        rarityElement.textContent = `Rareté: ${rarityNames[card.rarity]}`;
         rarityElement.style.fontWeight = 'bold';
         statsElement.appendChild(rarityElement);
     }
-    
-    // Add other card details
-    for (const [key, value] of Object.entries(card)) {
-        // Skip properties we've already handled or don't want to display
-        if (['nom', 'glb_path', 'rarity'].includes(key)) continue;
-        
-        const detailElement = document.createElement('p');
-        detailElement.textContent = `${key}: ${value}`;
-        statsElement.appendChild(detailElement);
+
+    if (card.description) {
+        const descriptionElement = document.createElement('p');
+        descriptionElement.className = 'card-description';
+        descriptionElement.textContent = card.description;
+        statsElement.appendChild(descriptionElement);
+    }
+
+    if (card.nationality && card.type) {
+        const nationalityElement = document.createElement('p');
+        nationalityElement.className = 'card-nationality';
+        nationalityElement.textContent = `Nationalité: ${card.nationality}`;
+        statsElement.appendChild(nationalityElement);
     }
     
     // Start animation

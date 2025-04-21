@@ -11,7 +11,7 @@ export const shaderMaterials = [];
 export function loadModels(scene, models, cardModelsArray = []) {
     console.log(models);
     for (let i = 0; i < models.length; i++) {
-        loadCard(scene, models[i], { x: 0, y: 0, z: - i * 0.04 }, cardModelsArray);
+        loadCard(scene, models[i], { x: 0, y: 0, z: - i * 0.05 }, cardModelsArray);
     }
 }
 

@@ -15,7 +15,7 @@
 }
 .card {
     width: 100%;
-    height: 500px;
+    height: 700px;
     position: relative;
     overflow: hidden;
 }
@@ -57,7 +57,10 @@ body {
     height: 100vh; /* Ensure the body takes the full height of the viewport */
 }
 
-#backBtn, #resetBtn {
+#backBtn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
     padding: 15px 30px;
     font-size: 18px;
     background-color: #8B4513; /* Saddle brown color */
@@ -70,7 +73,24 @@ body {
     text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
 }
 
-#backBtn:hover, #resetBtn:hover {
+.type-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #8B4513; /* Saddle brown color */
+    color: white;
+    border: 2px solid #A0522D; /* Sienna color */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-family: 'Rye', cursive; /* Apply the western-themed font */
+    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+}
+
+#ridersBtn {
+    display: none; /* Show the horses button by default */
+}
+
+#backBtn:hover {
     background-color: #A0522D; /* Sienna color */
     transform: scale(1.05);
 }
@@ -83,10 +103,14 @@ h1 {
     text-shadow: 2px 2px #000; /* Adds a shadow for a more rustic look */
 }
 
-.info-button {
+.info-button-container {
     position: absolute;
     bottom: 10px;
     left: 50%;
+    z-index: 10; /* Ensure button is above other elements */
+}
+
+.info-button  {
     transform: translateX(-50%);
     padding: 8px 16px;
     background-color: #4CAF50;
@@ -95,9 +119,9 @@ h1 {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    z-index: 10; /* Ensure button is above other elements */
 }
 
 .info-button.uncollected {
     background-color: #888;
 }
+

@@ -35,7 +35,6 @@ function updateCooldownTimer(remainingTime) {
 // Check cooldown status from the server
 async function checkCooldownStatus() {
     const response = await fetch('/api/cooldown-status');
-    console.log(await response);
     try {
         const data = await response.json();
         if (!data.canOpen) {
@@ -53,43 +52,35 @@ async function checkCooldownStatus() {
         } else {
             updateCooldownTimer(0); // Reset the display
         }
+        return data;
     } catch (error) {
         console.error("Error checking cooldown status:", error);
+        return { canOpen: true };
     }
 }
 
+// Make functions accessible to other scripts
+window.checkCooldownStatus = checkCooldownStatus;
+window.updateCooldownTimer = updateCooldownTimer;
+window.formatTime = formatTime;
 
-
-
-// Create and add continue button if it doesn't exist
-function ensureContinueButtonExists() {
-    if (!document.getElementById('continueBtn')) {
-        const continueBtn = document.createElement('button');
-        continueBtn.id = 'continueBtn';
-        continueBtn.textContent = 'Continue';
-        continueBtn.style.display = 'none';
-        document.body.appendChild(continueBtn);
-        
-        // Add event listener
-        continueBtn.addEventListener('click', function() {
-            // Unhide main content
-            const mainContent = document.querySelectorAll('body > .hidden:not(#cardDisplay):not(#continueBtn)');
-            mainContent.forEach(element => element.classList.remove('hidden'));
-            
-            // Hide cards and continue button
-            cardDisplay.classList.remove('show');
-            cardDisplay.classList.add('hidden');
-            continueBtn.style.display = 'none';
-        });
-    }
+async function getUser() {
+    return fetch('/api/get-user')
+        .then(response => response.json())
+        .catch(error => console.error('Error fetching user:', error));
 }
 
 document.getElementById("collectionBtn").addEventListener("click", () => {
-    window.location.href = "collection.html";
+    window.location.href = "collection.html?type=riders";
 });
 
 // Check cooldown status and ensure continue button exists when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    checkCooldownStatus();
-    ensureContinueButtonExists();
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = document.getElementById("user");
+    const userObj = await getUser();
+    if (userObj.connected) {
+        console.log(userObj);
+        user.textContent = "Welcome " + userObj.username;
+        checkCooldownStatus();
+    }    
 });

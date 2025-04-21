@@ -10,6 +10,7 @@ let controls_array = [];
 let scenes = [];
 
 function displayCollection(collection, all_riders) {
+    console.log("collection: ", collection);
     const collectionDisplay = document.getElementById('collectionDisplay');
     collectionDisplay.innerHTML = '';
     for (let i = 0; i < all_riders.length; i++) {
@@ -23,23 +24,6 @@ function displayCollection(collection, all_riders) {
         cardRenderContainer.className = 'card-render-container';
         cardDiv.appendChild(cardRenderContainer);
         
-        // Add info button for cards that are in the collection
-        if (collection.some(card => card.name === all_riders[i].name)) {
-            const infoButton = document.createElement('button');
-            infoButton.textContent = 'View Details';
-            infoButton.className = 'info-button';
-            
-            // Store the card name in a data attribute to avoid closure issues
-            infoButton.dataset.cardName = all_riders[i].name;
-            
-            // Use a more direct event handler
-            infoButton.onclick = function() {
-                console.log("Button clicked for:", this.dataset.cardName);
-                window.location.href = `/info.html?name=${encodeURIComponent(this.dataset.cardName)}`;
-            };
-            
-            cardDiv.appendChild(infoButton);
-        }
         
         collectionDisplay.appendChild(cardDiv);
         
@@ -65,8 +49,35 @@ function displayCollection(collection, all_riders) {
             console.log("in collection");
             console.log(all_riders[i].glb_path);
             loadCard(scene, all_riders[i].glb_path);
+            // Add info button for cards that are in the collection
+        
+            const infoButtonContainer = document.createElement('div');
+            infoButtonContainer.className = 'info-button-container';
+            const infoButton = document.createElement('button');
+            infoButton.textContent = 'View Details';
+            infoButton.className = 'info-button';
+            
+            // Store the card name in a data attribute to avoid closure issues
+            infoButton.dataset.cardName = all_riders[i].name;
+            
+            // Use a more direct event handler
+            infoButton.onclick = function() {
+                console.log("Button clicked for:", this.dataset.cardName);
+                window.location.href = `/info.html?name=${encodeURIComponent(this.dataset.cardName)}`;
+            };
+
+            const numberOfCards = document.createElement('p');
+            numberOfCards.className = 'number-of-cards';
+            const matchingCard = collection.find(card => card.name === all_riders[i].name);
+            if (matchingCard) {
+                numberOfCards.textContent = `(x${matchingCard.number_of_cards})`;
+            }
+            
+            infoButtonContainer.appendChild(numberOfCards);
+            infoButtonContainer.appendChild(infoButton);
+            cardDiv.appendChild(infoButtonContainer);
         } else {
-            loadCard(scene, 'Unknown.glb');
+            loadCard(scene, 'Inconnu.glb');
         }
     }
 }
@@ -112,22 +123,15 @@ document.getElementById("backBtn").addEventListener("click", () => {
     window.location.href = "index.html";
 });
 
-document.getElementById("resetBtn").addEventListener("click", async () => {
-    fetch('/api/reset-collection', { method: 'POST' })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Collection reset:', data);
-            // Optionally, refresh the collection display
-            displayCollection([], []);
-        })
-        .catch(error => console.error('Error resetting collection:', error));
-});
-
 document.getElementById("horsesBtn").addEventListener("click", () => {
+    document.getElementById("horsesBtn").style.display = "none";
+    document.getElementById("ridersBtn").style.display = "block";
     window.location.href = "collection.html?type=horses";
 });
 
 document.getElementById("ridersBtn").addEventListener("click", () => {
+    document.getElementById("ridersBtn").style.display = "none";
+    document.getElementById("horsesBtn").style.display = "block";
     window.location.href = "collection.html?type=riders";
 });
 
@@ -139,13 +143,12 @@ if (window.location.pathname.startsWith('/collection.html')) {
         document.getElementById("horsesBtn").style.display = "none";
         document.getElementById("ridersBtn").style.display = "block";
         poolFunction = getAllHorses;
+        document.title = "Collection de chevaux";
     }
     else if (cardType === 'riders') {
-        document.getElementById("horsesBtn").style.display = "block";
         document.getElementById("ridersBtn").style.display = "none";
-    } else {
         document.getElementById("horsesBtn").style.display = "block";
-        document.getElementById("ridersBtn").style.display = "block";
+        document.title = "Collection de cavaliers";
     }
     Promise.all([getCollection(), poolFunction()])
         .then(([collection, all_riders]) => {

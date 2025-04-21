@@ -8,21 +8,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="header" class="header">
+        <h3 id="user">Not connected</h3>
+        <div class="auth-buttons">
+            <a href="login.html" class="auth-btn">Login</a>
+            <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+    </div>
     <div id="cooldownDisplay" class="cooldown-hidden">
         <span>Next booster available in: </span>
         <span id="cooldownTimer">00:00:00</span>
     </div>
-    <div class="auth-buttons">
-        <a href="login.html" class="auth-btn">Login</a>
-        <a href="signup.html" class="auth-btn">Sign Up</a>
-    </div>
     <h1>HippoTech</h1>
     <h2>Horse Trading Card Game</h2>
     <button id="openBoosterBtn">Open Booster Pack</button>
-    <button id="collectionBtn">Collection</button>
-    <div id="cardDisplay" class="hidden">
-        <p>prout</p>
-    </div>
+    <button id="collectionBtn" class="change-btn">Collection</button>
+    <button id="gameBtn" class="change-btn">Game</button>
+    <div id="cardDisplay" class="hidden"></div>
     <script src="src/index.js"></script>
     <script type="module" src="src/booster.js"></script>
 </body>

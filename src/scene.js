@@ -19,7 +19,7 @@ export function initScene(displayName, renderer, camera) {
     camera.aspect = width / height;
     camera.near = 0.1;
     camera.far = 1000;
-    camera.position.set(0, 0, 5); // Position camera away from the origin
+    camera.position.set(0, 0, 6); // Position camera away from the origin
     camera.lookAt(0, 0, 0); // Make camera look at the origin
     camera.updateProjectionMatrix();
     
