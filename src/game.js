@@ -52,8 +52,8 @@ const player = {
     height: 50 * SCALE_FACTOR, // Scale up the height
     color: 'blue',
     dy: 0,
-    gravity: 0.5 * SCALE_FACTOR, // Scale gravity to match larger elements
-    jumpStrength: 12 * SCALE_FACTOR, // Scale jump strength proportionally
+    gravity: 0.26 * SCALE_FACTOR, // Reduced from 0.5 to make jumps longer
+    jumpStrength: 6* SCALE_FACTOR, // Reduced from 12 to make jumps less high
     isJumping: false,
     // Use saved stats or default values
     maxSpeed: savedStats.maxSpeed || 2.5,  
@@ -195,7 +195,7 @@ function update(timestamp) {
     updateBackground();
     
     // Check if we're approaching the finish line
-    if (score >= FINISH_SCORE - 500 && !finishLine.visible) {
+    if (score >= FINISH_SCORE && !finishLine.visible) {
         finishLine.visible = true;
         finishLine.x = canvas.width + 100; // Start off-screen
     }
@@ -272,25 +272,19 @@ function update(timestamp) {
             if (player.hasShield) {
                 // Use the shield instead of slowing down
                 player.hasShield = false;
-                shieldUsedNotificationTime = Date.now(); // Set the time when shield was used
+                shieldUsedNotificationTime = Date.now();
                 
                 // Mark this obstacle as "passed through" to prevent future collisions
                 obstacle.passedThrough = true;
-                
-                // Move the obstacle slightly to avoid getting stuck in it
-                obstacle.x = player.x + player.width; // Position it just past the player
             } else if (!obstacle.passedThrough) { // Only slow down if not already passed through
-                // Instead of ending the game, set speed to 0
-                player.currentSpeed = 0;
+                // Set speed to exactly 1 instead of a percentage of max speed
+                player.currentSpeed = 2.5; // Fixed value instead of player.maxSpeed * 0.3
                 
                 // Mark this obstacle as collided so we don't hit it again
                 obstacle.passedThrough = true;
                 
                 // Display collision notification
                 collisionNotificationTime = Date.now();
-                
-                // Move the obstacle slightly to avoid getting stuck in it
-                obstacle.x = player.x + player.width; // Position it just past the player
             }
         }
     });
@@ -632,8 +626,8 @@ document.addEventListener('keydown', event => {
         player.dy = -player.jumpStrength; // Apply upward velocity
         jumpCount++; // Increment jump count
         
-        // Reduce speed by 30% when jumping
-        player.currentSpeed *= 0.6;
+        // Reduce speed by 20% when jumping (was 40% before)
+        player.currentSpeed *= 0.8;
     }
 });
 
