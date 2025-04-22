@@ -65,16 +65,33 @@
     <script src="src/stats.js"></script>
 
     <script>
+    // Declare these variables at the global scope so they're available to all functions
+    let selectedCharacter = null;
+    let selectedHorse = null;
+    
     async function initializeUI() {
         if (!isDataLoaded()) {
             await loadCardData();
         }
         
+        // Clear any previous selections to avoid default selections
+        localStorage.removeItem('selectedCharacter');
+        localStorage.removeItem('selectedHorse');
+        
         // Replace the character button creation code with this
     const characterGrid = document.querySelector('.selection-column:nth-child(1) .selection-grid');
     characterGrid.innerHTML = ''; // Clear existing content
 
-    for (const [id, character] of Object.entries(CHARACTERS)) {
+    // Get characters and sort by rarity in descending order
+    const sortedCharacters = Object.entries(CHARACTERS)
+        .sort((a, b) => {
+            // Sort by rarity (higher number first)
+            const rarityA = a[1].rarity || 0;
+            const rarityB = b[1].rarity || 0;
+            return rarityB - rarityA;
+        });
+
+    for (const [id, character] of sortedCharacters) {
         const card = document.createElement('div');
         card.className = 'selection-button';
         card.dataset.id = id;
@@ -83,7 +100,7 @@
         
         // Create character image
         const image = document.createElement('img');
-        image.src = `./assets/${character.imagePath}`;
+        image.src = `./assets/cards_png/${character.imagePath}`;
         console.log(image.src);
         image.alt = character.name;
         image.className = 'character-image';
@@ -110,6 +127,7 @@
         const stats = document.createElement('div');
         stats.className = 'character-stats';
         stats.innerHTML = `
+            <div>Rarity: ${character.rarity || 'Common'}</div>
             <div>Skill: ${character.horseSkill}</div>
             <div>Speed: ${character.maxSpeed > 0 ? '+' : ''}${character.maxSpeed}</div>
             <div>Accel: ${character.acceleration > 0 ? '+' : ''}${character.acceleration}</div>
@@ -127,7 +145,16 @@
     const horseGrid = document.querySelector('.selection-column:nth-child(2) .selection-grid');
     horseGrid.innerHTML = ''; // Clear existing content
 
-    for (const [id, horse] of Object.entries(HORSES)) {
+    // Get horses and sort by rarity in descending order
+    const sortedHorses = Object.entries(HORSES)
+        .sort((a, b) => {
+            // Sort by rarity (higher number first)
+            const rarityA = a[1].rarity || 0;
+            const rarityB = b[1].rarity || 0;
+            return rarityB - rarityA;
+        });
+
+    for (const [id, horse] of sortedHorses) {
         const card = document.createElement('div');
         card.className = 'selection-button';
         card.dataset.id = id;
@@ -136,7 +163,7 @@
         
         // Create horse image
         const image = document.createElement('img');
-        image.src = `assets/${horse.imagePath || `${id}.png`}`;
+        image.src = `assets/cards_png/${horse.imagePath || `${id}.png`}`;
         image.alt = horse.name;
         image.className = 'horse-image';
         
@@ -153,6 +180,7 @@
         const stats = document.createElement('div');
         stats.className = 'horse-stats';
         stats.innerHTML = `
+            <div>Rarity: ${horse.rarity || 'Common'}</div>
             <div>Skill: ${horse.horseSkill}</div>
             <div>Speed: ${horse.maxSpeed > 0 ? '+' : ''}${horse.maxSpeed}</div>
             <div>Accel: ${horse.acceleration > 0 ? '+' : ''}${horse.acceleration}</div>
@@ -167,32 +195,58 @@
     }
         
         // Rest of your initialization code
-        let selectedCharacter = localStorage.getItem('selectedCharacter') || null;
-        let selectedHorse = localStorage.getItem('selectedHorse') || null;
+        // Initialize with null, only set from localStorage if the items actually exist
+        selectedCharacter = null;
+        selectedHorse = null;
         
-        // Mark previously selected items
-        if (selectedCharacter) {
+        const storedCharacterId = localStorage.getItem('selectedCharacter');
+        const storedHorseId = localStorage.getItem('selectedHorse');
+        
+        // Only set selections if they exist in our data
+        if (storedCharacterId && CHARACTERS[storedCharacterId]) {
+            selectedCharacter = storedCharacterId;
             const characterButton = document.querySelector(`.selection-button[data-id="${selectedCharacter}"]`);
-            if (characterButton) characterButton.classList.add('selected');
+            if (characterButton) {
+                characterButton.classList.add('selected');
+                filterHorsesByCharacterSkill(CHARACTERS[selectedCharacter].horseSkill);
+            }
         }
         
-        if (selectedHorse) {
+        if (storedHorseId && HORSES[storedHorseId]) {
+            selectedHorse = storedHorseId;
             const horseButton = document.querySelector(`.selection-button[data-id="${selectedHorse}"]`);
-            if (horseButton) horseButton.classList.add('selected');
+            if (horseButton) {
+                horseButton.classList.add('selected');
+                filterCharactersByHorseSkill(HORSES[selectedHorse].horseSkill);
+            }
         }
         
         // Update stats initially
         updateStats();
     }
         initializeUI();
-        function selectItem(e) {
-            // Find the card element (may be e.target or a parent)
-            let cardElement = e.target.closest('.selection-button');
-            if (!cardElement) return;
-            
-            const type = cardElement.dataset.type;
-            const id = cardElement.dataset.id;
-            
+        
+    function selectItem(e) {
+        // Find the card element (may be e.target or a parent)
+        let cardElement = e.target.closest('.selection-button');
+        if (!cardElement) return;
+        
+        const type = cardElement.dataset.type;
+        const id = cardElement.dataset.id;
+        
+        // Check if clicking already selected item (to unselect)
+        if ((type === 'character' && selectedCharacter === id) || 
+            (type === 'horse' && selectedHorse === id)) {
+            // Unselect this item
+            cardElement.classList.remove('selected');
+            if (type === 'character') {
+                selectedCharacter = null;
+                showAllHorses(); // Show all horses when no character selected
+            } else {
+                selectedHorse = null;
+                showAllCharacters(); // Show all characters when no horse selected
+            }
+        } else {
             // Update selection
             if (type === 'character') {
                 // Clear previous selection
@@ -200,48 +254,121 @@
                     button => button.classList.remove('selected')
                 );
                 selectedCharacter = id;
+                // Filter horses based on character's horseSkill
+                filterHorsesByCharacterSkill(CHARACTERS[id].horseSkill);
             } else {
                 // Clear previous selection
                 document.querySelectorAll('.selection-column:nth-child(2) .selection-button.selected').forEach(
                     button => button.classList.remove('selected')
                 );
                 selectedHorse = id;
+                // Filter characters based on horse's horseSkill
+                filterCharactersByHorseSkill(HORSES[id].horseSkill);
             }
             
             // Mark this button as selected
             cardElement.classList.add('selected');
-            
-            // Update stats display
-            updateStats();
         }
         
-        function updateStats() {
-            const stats = calculateStats(selectedCharacter, selectedHorse);
-            
-            // Update compatibility message
-            const incompatibleMessage = document.getElementById('incompatibleMessage');
-            if (!stats.compatible) {
-                incompatibleMessage.textContent = stats.message;
-                incompatibleMessage.style.display = 'block';
-                document.getElementById('startButton').disabled = true;
-            } else {
-                incompatibleMessage.style.display = 'none';
-                document.getElementById('startButton').disabled = false;
-            }
-            
-            // Update stat bars and values
-            document.getElementById('speedBar').style.width = `${stats.display.maxSpeed}%`;
-            document.getElementById('speedValue').textContent = `${stats.display.maxSpeed.toFixed(1)}`;
-            document.getElementById('speedCalc').textContent = stats.calculations.maxSpeed;
-            
-            document.getElementById('accelBar').style.width = `${stats.display.acceleration}%`;
-            document.getElementById('accelValue').textContent = `${stats.display.acceleration.toFixed(1)}`;
-            document.getElementById('accelCalc').textContent = stats.calculations.acceleration;
-            
-            document.getElementById('shieldBar').style.width = `${stats.display.shieldChance}%`;
-            document.getElementById('shieldValue').textContent = `${stats.display.shieldChance.toFixed(1)}%`;
-            document.getElementById('shieldCalc').textContent = stats.calculations.shieldChance;
+        // Update stats display
+        updateStats();
+    }
+    
+    // Function to filter horses based on character's horseSkill
+    function filterHorsesByCharacterSkill(characterSkill) {
+        // Only filter if we have a valid skill value
+        if (characterSkill === undefined || characterSkill === null) {
+            showAllHorses();
+            return;
         }
+        
+        const horseButtons = document.querySelectorAll('.selection-column:nth-child(2) .selection-button');
+        horseButtons.forEach(button => {
+            const horseId = button.dataset.id;
+            const horse = HORSES[horseId];
+            
+            if (horse && horse.horseSkill <= characterSkill) {
+                button.style.display = 'flex'; // Show compatible horses
+            } else {
+                button.style.display = 'none'; // Hide incompatible horses
+                // If currently selected horse is now incompatible, unselect it
+                if (selectedHorse === horseId) {
+                    button.classList.remove('selected');
+                    selectedHorse = null;
+                }
+            }
+        });
+    }
+    
+    // Function to filter characters based on horse's horseSkill
+    function filterCharactersByHorseSkill(horseSkill) {
+        // Only filter if we have a valid skill value
+        if (horseSkill === undefined || horseSkill === null) {
+            showAllCharacters();
+            return;
+        }
+        
+        const characterButtons = document.querySelectorAll('.selection-column:nth-child(1) .selection-button');
+        characterButtons.forEach(button => {
+            const characterId = button.dataset.id;
+            const character = CHARACTERS[characterId];
+            
+            if (character && character.horseSkill >= horseSkill) {
+                button.style.display = 'flex'; // Show compatible characters
+            } else {
+                button.style.display = 'none'; // Hide incompatible characters
+                // If currently selected character is now incompatible, unselect it
+                if (selectedCharacter === characterId) {
+                    button.classList.remove('selected');
+                    selectedCharacter = null;
+                }
+            }
+        });
+    }
+    
+    // Function to show all horses
+    function showAllHorses() {
+        const horseButtons = document.querySelectorAll('.selection-column:nth-child(2) .selection-button');
+        horseButtons.forEach(button => {
+            button.style.display = 'flex';
+        });
+    }
+    
+    // Function to show all characters
+    function showAllCharacters() {
+        const characterButtons = document.querySelectorAll('.selection-column:nth-child(1) .selection-button');
+        characterButtons.forEach(button => {
+            button.style.display = 'flex';
+        });
+    }
+    
+    function updateStats() {
+        const stats = calculateStats(selectedCharacter, selectedHorse);
+        
+        // Update compatibility message
+        const incompatibleMessage = document.getElementById('incompatibleMessage');
+        if (!stats.compatible) {
+            incompatibleMessage.textContent = stats.message;
+            incompatibleMessage.style.display = 'block';
+            document.getElementById('startButton').disabled = true;
+        } else {
+            incompatibleMessage.style.display = 'none';
+            document.getElementById('startButton').disabled = false;
+        }
+        
+        // Update stat bars and values
+        document.getElementById('speedBar').style.width = `${stats.display.maxSpeed}%`;
+        document.getElementById('speedValue').textContent = `${stats.display.maxSpeed.toFixed(1)}`;
+        document.getElementById('speedCalc').textContent = stats.calculations.maxSpeed;
+        
+        document.getElementById('accelBar').style.width = `${stats.display.acceleration}%`;
+        document.getElementById('accelValue').textContent = `${stats.display.acceleration.toFixed(1)}`;
+        document.getElementById('accelCalc').textContent = stats.calculations.acceleration;
+        
+        document.getElementById('shieldBar').style.width = `${stats.display.shieldChance}%`;
+        document.getElementById('shieldValue').textContent = `${stats.display.shieldChance.toFixed(1)}%`;
+        document.getElementById('shieldCalc').textContent = stats.calculations.shieldChance;
+    }
         
         // Start button logic
         document.getElementById('startButton').addEventListener('click', function() {
@@ -257,10 +384,15 @@
             window.location.href = 'game.html';
         });
         
-        // Back button logic
         document.getElementById('backButton').addEventListener('click', function() {
+            // Clear selections from localStorage
+            localStorage.setItem('selectedCharacter', selectedCharacter);
+            localStorage.setItem('selectedHorse', selectedHorse);
+            
+            // Redirect to main menu
             window.location.href = 'home.html';
         });
+
     </script>
 </body>
 </html>

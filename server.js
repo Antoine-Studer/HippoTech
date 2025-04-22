@@ -16,7 +16,7 @@ app.use(session({
 
 // ... rest of your server.js code
 // Cooldown configuration
-const COOLDOWN_MS = 60 * 1000; // 5 minutes cooldown
+const COOLDOWN_MS = 0.5 * 1000; // 5 minutes cooldown
 const lastBoosterOpenTime = new Map(); // Track when each user last opened a booster
 
 // Serve static files (HTML, CSS, JS)

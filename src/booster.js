@@ -88,7 +88,7 @@ function onCardClick(event) {
         }
         
         // Reset camera position to origin
-        camera.position.set(0, 0, 7);
+        camera.position.set(0, 0, 6);
         
         // Reset orbit controls target if needed
         if (controls && controls.target) {
