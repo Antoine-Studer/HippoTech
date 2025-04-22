@@ -74,6 +74,10 @@ document.getElementById("collectionBtn").addEventListener("click", () => {
     window.location.href = "collection.html?type=riders";
 });
 
+document.getElementById("gameBtn").addEventListener("click", () => {
+    window.location.href = "home.html";
+});
+
 // Check cooldown status and ensure continue button exists when the page loads
 document.addEventListener('DOMContentLoaded', async () => {
     const user = document.getElementById("user");

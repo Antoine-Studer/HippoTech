@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Home</h1>
+        <p class="tagline" style="text-align: center; color: var(--light-color); margin-bottom: 30px;">Choose your rider and horse, conquer the track!</p>
+        
+        <div class="selected-info">
+            <h2>Your Selection</h2>
+            <div id="selectedCharacter" class="selected-none">No rider selected</div>
+            <div id="selectedHorse" class="selected-none">No horse selected</div>
+            
+            <h3>Current Stats</h3>
+            <div class="stat-mini">
+                <label>Speed <span id="speedValueMini">100</span></label>
+                <div class="stat-mini-bar">
+                    <div id="speedBarMini" class="stat-mini-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+            <div class="stat-mini">
+                <label>Acceleration <span id="accelValueMini">100</span></label>
+                <div class="stat-mini-bar">
+                    <div id="accelBarMini" class="stat-mini-fill" style="width: 50%;"></div>
+                </div>
+            </div>
+            <div class="stat-mini">
+                <label>Shield Chance <span id="shieldValueMini">25%</span></label>
+                <div class="stat-mini-bar">
+                    <div id="shieldBarMini" class="stat-mini-fill" style="width: 25%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-container" style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
+            <button id="startButton" class="start-button">Race Now</button>
+            <button id="characterButton" class="character-button">Choose Rider & Horse</button>
+        </div>
+    </div>
+    
+    <script src="src/stats.js"></script>
+    <script>
+        // Check for saved selections
+        const selectedCharacterId = localStorage.getItem('selectedCharacter');
+        const selectedHorseId = localStorage.getItem('selectedHorse');
+        
+        // Update display
+        if (selectedCharacterId && typeof CHARACTERS !== 'undefined' && CHARACTERS[selectedCharacterId]) {
+            document.getElementById('selectedCharacter').textContent = 
+                `Rider: ${CHARACTERS[selectedCharacterId].name}`;
+            document.getElementById('selectedCharacter').className = '';
+        }
+        
+        if (selectedHorseId && typeof HORSES !== 'undefined' && HORSES[selectedHorseId]) {
+            document.getElementById('selectedHorse').textContent = 
+                `Horse: ${HORSES[selectedHorseId].name}`;
+            document.getElementById('selectedHorse').className = '';
+        }
+        
+        // Update stats display if stats.js is loaded
+        if (typeof calculateStats === 'function') {
+            const stats = calculateStats(selectedCharacterId, selectedHorseId);
+            
+            document.getElementById('speedBarMini').style.width = `${stats.display.maxSpeed}%`;
+            document.getElementById('speedValueMini').textContent = stats.display.maxSpeed.toFixed(1);
+            
+            document.getElementById('accelBarMini').style.width = `${stats.display.acceleration}%`;
+            document.getElementById('accelValueMini').textContent = stats.display.acceleration.toFixed(1);
+            
+            document.getElementById('shieldBarMini').style.width = `${stats.display.shieldChance}%`;
+            document.getElementById('shieldValueMini').textContent = `${stats.display.shieldChance.toFixed(1)}%`;
+        }
+        
+        // Button event handlers
+        document.getElementById('startButton').addEventListener('click', function() {
+            window.location.href = 'game.html';
+        });
+        
+        document.getElementById('characterButton').addEventListener('click', function() {
+            window.location.href = 'character.html';
+        });
+    </script>
+</body>
+</html>

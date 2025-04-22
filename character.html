@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Rider and Horse</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Select Your Rider and Horse</h1>
+        
+        <div class="selection-container">
+            <div class="selection-column">
+                <h2>Riders</h2>
+                <div class="selection-grid">
+                    <!-- Character buttons will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="selection-column">
+                <h2>Horses</h2>
+                <div class="selection-grid">
+                    <!-- Horse buttons will be inserted here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-panel">
+            <h2>Racing Stats</h2>
+            
+            <div id="incompatibleMessage" class="incompatible" style="display: none;"></div>
+            
+            <div class="stat-container">
+                <label>Speed <span id="speedValue">100</span></label>
+                <div class="stat-bar">
+                    <div id="speedBar" class="stat-fill" style="width: 50%;"></div>
+                </div>
+                <div id="speedCalc" class="calculation"></div>
+            </div>
+            
+            <div class="stat-container">
+                <label>Acceleration <span id="accelValue">100</span></label>
+                <div class="stat-bar">
+                    <div id="accelBar" class="stat-fill" style="width: 50%;"></div>
+                </div>
+                <div id="accelCalc" class="calculation"></div>
+            </div>
+            
+            <div class="stat-container">
+                <label>Shield Chance <span id="shieldValue">25%</span></label>
+                <div class="stat-bar">
+                    <div id="shieldBar" class="stat-fill" style="width: 25%;"></div>
+                </div>
+                <div id="shieldCalc" class="calculation"></div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button id="startButton" class="start-button">Begin Race</button>
+            <button id="backButton" class="back-button">Back to Main</button>
+        </div>
+    </div>
+    
+    <script src="src/stats.js"></script>
+
+    <script>
+    async function initializeUI() {
+        if (!isDataLoaded()) {
+            await loadCardData();
+        }
+        
+        // Replace the character button creation code with this
+    const characterGrid = document.querySelector('.selection-column:nth-child(1) .selection-grid');
+    characterGrid.innerHTML = ''; // Clear existing content
+
+    for (const [id, character] of Object.entries(CHARACTERS)) {
+        const card = document.createElement('div');
+        card.className = 'selection-button';
+        card.dataset.id = id;
+        card.dataset.type = 'character';
+        card.addEventListener('click', selectItem);
+        
+        // Create character image
+        const image = document.createElement('img');
+        image.src = `./assets/${character.imagePath}`;
+        console.log(image.src);
+        image.alt = character.name;
+        image.className = 'character-image';
+        
+        // Add error handling for images
+        image.onerror = function() {
+            console.error(`Failed to load image: ${this.src}`);
+            // Try fallback with just the name
+            this.src = `assets/${character.name.split(',')[0]}.png`;
+            console.log(`Trying fallback: ${this.src}`);
+            
+            // If fallback also fails
+            this.onerror = function() {
+                console.error(`Fallback also failed: ${this.src}`);
+                this.src = 'assets/default.png'; // Final fallback to a default image
+                this.style.border = '2px solid red'; // Visual indicator of failed load
+            };
+        };
+        
+        // Create character information
+        const info = document.createElement('div');
+        info.className = 'character-info';
+        
+        // Character name
+        const name = document.createElement('div');
+        name.className = 'character-name';
+        name.textContent = character.name;
+        
+        // Character stats
+        const stats = document.createElement('div');
+        stats.className = 'character-stats';
+        stats.innerHTML = `
+            <div>Skill: ${character.horseSkill}</div>
+            <div>Speed: ${character.maxSpeed > 0 ? '+' : ''}${character.maxSpeed}</div>
+            <div>Accel: ${character.acceleration > 0 ? '+' : ''}${character.acceleration}</div>
+        `;
+        
+        // Append all elements
+        info.appendChild(name);
+        info.appendChild(stats);
+        card.appendChild(image);
+        card.appendChild(info);
+        characterGrid.appendChild(card);
+    }
+
+    // Replace the horse button creation code with this
+    const horseGrid = document.querySelector('.selection-column:nth-child(2) .selection-grid');
+    horseGrid.innerHTML = ''; // Clear existing content
+
+    for (const [id, horse] of Object.entries(HORSES)) {
+        const card = document.createElement('div');
+        card.className = 'selection-button';
+        card.dataset.id = id;
+        card.dataset.type = 'horse';
+        card.addEventListener('click', selectItem);
+        
+        // Create horse image
+        const image = document.createElement('img');
+        image.src = `assets/${horse.imagePath || `${id}.png`}`;
+        image.alt = horse.name;
+        image.className = 'horse-image';
+        
+        // Create horse information
+        const info = document.createElement('div');
+        info.className = 'horse-info';
+        
+        // Horse name
+        const name = document.createElement('div');
+        name.className = 'horse-name';
+        name.textContent = horse.name;
+        
+        // Horse stats
+        const stats = document.createElement('div');
+        stats.className = 'horse-stats';
+        stats.innerHTML = `
+            <div>Skill: ${horse.horseSkill}</div>
+            <div>Speed: ${horse.maxSpeed > 0 ? '+' : ''}${horse.maxSpeed}</div>
+            <div>Accel: ${horse.acceleration > 0 ? '+' : ''}${horse.acceleration}</div>
+        `;
+        
+        // Append all elements
+        info.appendChild(name);
+        info.appendChild(stats);
+        card.appendChild(image);
+        card.appendChild(info);
+        horseGrid.appendChild(card);
+    }
+        
+        // Rest of your initialization code
+        let selectedCharacter = localStorage.getItem('selectedCharacter') || null;
+        let selectedHorse = localStorage.getItem('selectedHorse') || null;
+        
+        // Mark previously selected items
+        if (selectedCharacter) {
+            const characterButton = document.querySelector(`.selection-button[data-id="${selectedCharacter}"]`);
+            if (characterButton) characterButton.classList.add('selected');
+        }
+        
+        if (selectedHorse) {
+            const horseButton = document.querySelector(`.selection-button[data-id="${selectedHorse}"]`);
+            if (horseButton) horseButton.classList.add('selected');
+        }
+        
+        // Update stats initially
+        updateStats();
+    }
+        initializeUI();
+        function selectItem(e) {
+            // Find the card element (may be e.target or a parent)
+            let cardElement = e.target.closest('.selection-button');
+            if (!cardElement) return;
+            
+            const type = cardElement.dataset.type;
+            const id = cardElement.dataset.id;
+            
+            // Update selection
+            if (type === 'character') {
+                // Clear previous selection
+                document.querySelectorAll('.selection-column:nth-child(1) .selection-button.selected').forEach(
+                    button => button.classList.remove('selected')
+                );
+                selectedCharacter = id;
+            } else {
+                // Clear previous selection
+                document.querySelectorAll('.selection-column:nth-child(2) .selection-button.selected').forEach(
+                    button => button.classList.remove('selected')
+                );
+                selectedHorse = id;
+            }
+            
+            // Mark this button as selected
+            cardElement.classList.add('selected');
+            
+            // Update stats display
+            updateStats();
+        }
+        
+        function updateStats() {
+            const stats = calculateStats(selectedCharacter, selectedHorse);
+            
+            // Update compatibility message
+            const incompatibleMessage = document.getElementById('incompatibleMessage');
+            if (!stats.compatible) {
+                incompatibleMessage.textContent = stats.message;
+                incompatibleMessage.style.display = 'block';
+                document.getElementById('startButton').disabled = true;
+            } else {
+                incompatibleMessage.style.display = 'none';
+                document.getElementById('startButton').disabled = false;
+            }
+            
+            // Update stat bars and values
+            document.getElementById('speedBar').style.width = `${stats.display.maxSpeed}%`;
+            document.getElementById('speedValue').textContent = `${stats.display.maxSpeed.toFixed(1)}`;
+            document.getElementById('speedCalc').textContent = stats.calculations.maxSpeed;
+            
+            document.getElementById('accelBar').style.width = `${stats.display.acceleration}%`;
+            document.getElementById('accelValue').textContent = `${stats.display.acceleration.toFixed(1)}`;
+            document.getElementById('accelCalc').textContent = stats.calculations.acceleration;
+            
+            document.getElementById('shieldBar').style.width = `${stats.display.shieldChance}%`;
+            document.getElementById('shieldValue').textContent = `${stats.display.shieldChance.toFixed(1)}%`;
+            document.getElementById('shieldCalc').textContent = stats.calculations.shieldChance;
+        }
+        
+        // Start button logic
+        document.getElementById('startButton').addEventListener('click', function() {
+            // Store selections in localStorage
+            localStorage.setItem('selectedCharacter', selectedCharacter);
+            localStorage.setItem('selectedHorse', selectedHorse);
+            
+            // Store calculated in-game stats
+            const stats = calculateStats(selectedCharacter, selectedHorse);
+            localStorage.setItem('playerStats', JSON.stringify(stats.game));
+            
+            // Redirect to game
+            window.location.href = 'game.html';
+        });
+        
+        // Back button logic
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

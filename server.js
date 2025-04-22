@@ -251,7 +251,7 @@ app.get('/api/collection', requireAuth, async (req, res) => {
     const userId = req.session.userId;
     try {
         const result = await pool.query(
-            'SELECT cards.name, user_collection.number_of_cards FROM user_collection RIGHT JOIN cards ON cards.id = user_collection.card_id WHERE user_collection.user_id = $1',
+            'SELECT cards.name, user_collection.number_of_cards, cards.id FROM user_collection RIGHT JOIN cards ON cards.id = user_collection.card_id WHERE user_collection.user_id = $1',
             [userId]
         );
         res.json(result.rows);
