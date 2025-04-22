@@ -38,15 +38,22 @@ try {
 console.log(`Character: ${selectedCharacter}, Horse: ${selectedHorse}`);
 console.log("Stats:", savedStats);
 
+// Scaling factor to apply to all game elements
+const SCALE_FACTOR = 1.7;
+
+// Update the ground level padding throughout the code
+const GROUND_PADDING = 35 * SCALE_FACTOR; // Increase from 20 to 35
+
+// Update player dimensions
 const player = {
     x: 50,
     y: 0, // Will be set dynamically based on canvas height
-    width: 35, // Reduced from 50 to 35 for a narrower hitbox
-    height: 50,
+    width: 35 * SCALE_FACTOR, // Scale up the width
+    height: 50 * SCALE_FACTOR, // Scale up the height
     color: 'blue',
     dy: 0,
-    gravity: 0.5,
-    jumpStrength: 12,
+    gravity: 0.5 * SCALE_FACTOR, // Scale gravity to match larger elements
+    jumpStrength: 12 * SCALE_FACTOR, // Scale jump strength proportionally
     isJumping: false,
     // Use saved stats or default values
     maxSpeed: savedStats.maxSpeed || 2.5,  
@@ -63,6 +70,7 @@ shieldIconImage.src = 'assets/shield.png'; // Create a shield icon image or use 
 
 // Add this variable near your other notification variables
 let shieldUsedNotificationTime = 0;
+let collisionNotificationTime = 0; // Add collision notification variable
 
 let obstacles = [];
 let score = 0;
@@ -79,33 +87,31 @@ fenceImage.src = 'assets/fence.png'; // Ensure the image has a transparent backg
 const backgroundImage = new Image();
 backgroundImage.src = 'assets/background.png'; // Ensure the image is in the correct path
 
-// Load the horse sprite sheet
-const horseSprite = new Image();
-horseSprite.src = 'assets/horse_animation_nobg.png';
+// Replace the horse sprite sheet loading and animation settings with this new implementation
 
-// Animation settings
+// Define the total number of animation frames
+const TOTAL_ANIMATION_FRAMES = 10;
+
+// Create an array to hold all the animation frame images
+const horseFrames = [];
+
+// Load all the individual frame images
+for (let i = 1; i <= TOTAL_ANIMATION_FRAMES; i++) {
+    const frameImage = new Image();
+    frameImage.src = `assets/horse_animation_nobg_${i}.png`;
+    horseFrames.push(frameImage);
+}
+
+// Add a specific jump animation image
+const jumpFrame = new Image();
+jumpFrame.src = 'assets/horse_animation_nobg_jump.png';
+
+// Simplified animation object
 const animation = {
-    frameWidth: 0,      // Will be set after image loads
-    frameHeight: 0,     // Will be set after image loads
-    totalFrames: 0,     // Will be set after image loads
-    currentFrame: 0,
-    frameCount: 0,
-    frameDuration: 5,   // Frames to wait before advancing animation
-    spriteRows: 1,      // Typically 1 row for a running animation
-    spriteColumns: 0    // Will be determined after image loads
-};
-
-// Analyze sprite sheet when loaded
-horseSprite.onload = function() {
-    // Simple sprite analyzer - assumes equal-sized frames in a single row
-    // If your sprite sheet has multiple rows, you'll need to adjust this
-    animation.frameHeight = horseSprite.height;
-    animation.spriteColumns = Math.floor(horseSprite.width / animation.frameHeight);
-    animation.frameWidth = horseSprite.width / animation.spriteColumns;
-    animation.totalFrames = animation.spriteColumns;
-    
-    console.log(`Sprite sheet analyzed: ${animation.totalFrames} frames detected`);
-    console.log(`Each frame is ${animation.frameWidth}x${animation.frameHeight} pixels`);
+    currentFrameIndex: 0,    // Current frame index in the array
+    frameCount: 0,           // Counter for timing
+    frameDuration: 5,        // How many game loops before changing frames
+    totalFrames: TOTAL_ANIMATION_FRAMES
 };
 
 // Variables for scrolling background
@@ -117,66 +123,73 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Position the player at the bottom of the screen
-    player.y = canvas.height - player.height - 20; // 20px padding from the bottom
+    // Position the player higher on the screen
+    player.y = canvas.height - player.height - GROUND_PADDING;
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Initial resize
 
-// When creating obstacles, update to add a 'jumped' property
-function createObstacle() {
-    if (obstacles.length > 0) {
-        const lastObstacle = obstacles[obstacles.length - 1];
-        if (lastObstacle.x > canvas.width - 200) {
-            return; // Do not create a new obstacle yet
-        }
-    }
+const OBSTACLE_POSITIONS = [
+    700, 1200, 1500, 1900, 2300, 2600, 3000, 3400, 3800,
+    4200, 4600, 5000, 5400, 5700, 6100, 6500, 6900, 7300, 7800,
+    8200, 8600, 9000, 9500, 10000, 10500, 11000, 11600, 12000
+];
 
-    const obstacle = {
-        x: canvas.width,
-        y: canvas.height - 80, // Position near the bottom of the screen
-        width: 30, // Hitbox width
-        height: 60, // Hitbox height
-        imageWidth: 50, // Image width (independent of hitbox)
-        imageHeight: 50, // Image height (independent of hitbox)
-        color: 'red', // Invisible rectangle for collision detection
-        jumped: false // Track if this obstacle has been jumped over
-    };
-    obstacles.push(obstacle);
+// Keep track of the next obstacle to be created
+let nextObstacleIndex = 0;
+let distanceTraveled = 0;
+
+// Modify the createObstacles function to create larger obstacles
+function createObstacles() {
+    // Reset obstacle tracking for a new game
+    nextObstacleIndex = 0;
+    obstacles = [];
+    
+    // Pre-populate initial visible obstacles
+    while (nextObstacleIndex < OBSTACLE_POSITIONS.length && 
+           OBSTACLE_POSITIONS[nextObstacleIndex] < canvas.width + 200) {
+        const obstacle = {
+            x: OBSTACLE_POSITIONS[nextObstacleIndex],
+            y: canvas.height - (80 * SCALE_FACTOR), // Scale the y position
+            width: 30 * SCALE_FACTOR, // Scale the width
+            height: 60 * SCALE_FACTOR, // Scale the height
+            imageWidth: 50 * SCALE_FACTOR, // Scale image width
+            imageHeight: 50 * SCALE_FACTOR, // Scale image height
+            color: 'red',
+            jumped: false
+        };
+        obstacles.push(obstacle);
+        nextObstacleIndex++;
+    }
 }
 
-// Update the update function to check for jumping over obstacles
+// Modify the update function animation logic
 function update(timestamp) {
     if (gameOver || isPaused || hasWon) return;
     
     // Calculate delta time in seconds
-    const deltaTime = (timestamp - lastTimestamp) / 1000 || 0.016; // Fallback to ~60fps if no timestamp
+    const deltaTime = (timestamp - lastTimestamp) / 1000 || 0.016;
     lastTimestamp = timestamp;
     
-    // Update animation
-    animation.frameCount++;
-    if (animation.frameCount >= animation.frameDuration) {
-        animation.frameCount = 0;
-        animation.currentFrame = (animation.currentFrame + 1) % animation.totalFrames;
+    // Update animation with jump frame detection
+    if (player.isJumping) {
+        // When jumping, we'll use a specific jump frame
+        // We don't need to cycle through the animation frames
+        // Just keep the frame count going for smooth transition when landing
+        animation.frameCount++;
+    } else {
+        // Normal running animation when on the ground
+        animation.frameCount++;
+        if (animation.frameCount >= animation.frameDuration) {
+            animation.frameCount = 0;
+            
+            // Only update the frame index when not jumping
+            animation.currentFrameIndex = (animation.currentFrameIndex + 1) % TOTAL_ANIMATION_FRAMES;
+        }
     }
     
     // Adjust animation speed based on player speed
-    // Faster player speed = faster animation
-    animation.frameDuration = Math.max(3, 8 - Math.floor(player.currentSpeed));
-    
-    // Change animation based on player state
-    if (player.isJumping) {
-        // Use jumping frame (if your sprite sheet has one)
-        // This assumes a specific frame for jumping
-        animation.currentFrame = 3; // Adjust to your jumping frame number
-        animation.frameCount = 0; // Hold this frame
-    } else {
-        // Normal running animation - cycle through frames
-        if (animation.frameCount >= animation.frameDuration) {
-            animation.frameCount = 0;
-            animation.currentFrame = (animation.currentFrame + 1) % animation.totalFrames;
-        }
-    }
+    animation.frameDuration = Math.max(2, 7 - Math.floor(player.currentSpeed));
     
     // Update the background position
     updateBackground();
@@ -207,8 +220,8 @@ function update(timestamp) {
         player.y += player.dy;
         
         // Clamp the player's position to prevent falling below the ground
-        if (player.y >= canvas.height - player.height - 20) {
-            player.y = canvas.height - player.height - 20;
+        if (player.y >= canvas.height - player.height - GROUND_PADDING) {
+            player.y = canvas.height - player.height - GROUND_PADDING;
             player.dy = 0;
             player.isJumping = false;
         }
@@ -257,7 +270,7 @@ function update(timestamp) {
             player.y + player.height > obstacle.y
         ) {
             if (player.hasShield) {
-                // Use the shield instead of ending the game
+                // Use the shield instead of slowing down
                 player.hasShield = false;
                 shieldUsedNotificationTime = Date.now(); // Set the time when shield was used
                 
@@ -266,8 +279,18 @@ function update(timestamp) {
                 
                 // Move the obstacle slightly to avoid getting stuck in it
                 obstacle.x = player.x + player.width; // Position it just past the player
-            } else if (!obstacle.passedThrough) { // Only end game if not already passed through
-                endGame();
+            } else if (!obstacle.passedThrough) { // Only slow down if not already passed through
+                // Instead of ending the game, set speed to 0
+                player.currentSpeed = 0;
+                
+                // Mark this obstacle as collided so we don't hit it again
+                obstacle.passedThrough = true;
+                
+                // Display collision notification
+                collisionNotificationTime = Date.now();
+                
+                // Move the obstacle slightly to avoid getting stuck in it
+                obstacle.x = player.x + player.width; // Position it just past the player
             }
         }
     });
@@ -281,9 +304,24 @@ function update(timestamp) {
         return;
     }
     
-    // Create new obstacles
-    if (Math.random() < 0.02 && !finishLine.visible) {
-        createObstacle();
+    // Increase distance traveled based on player speed
+    distanceTraveled += player.currentSpeed;
+    
+    // Check if we need to spawn the next obstacle from our pattern
+    if (nextObstacleIndex < OBSTACLE_POSITIONS.length && 
+        OBSTACLE_POSITIONS[nextObstacleIndex] <= distanceTraveled + canvas.width) {
+        const obstacle = {
+            x: OBSTACLE_POSITIONS[nextObstacleIndex] - distanceTraveled + canvas.width,
+            y: canvas.height - (80 * SCALE_FACTOR), // Scale the y position
+            width: 30 * SCALE_FACTOR, // Scale the width
+            height: 60 * SCALE_FACTOR, // Scale the height
+            imageWidth: 50 * SCALE_FACTOR, // Scale image width
+            imageHeight: 50 * SCALE_FACTOR, // Scale image height
+            color: 'red',
+            jumped: false
+        };
+        obstacles.push(obstacle);
+        nextObstacleIndex++;
     }
 }
 
@@ -318,30 +356,27 @@ function draw() {
     ctx.fillStyle = 'transparent'; // Make the hitbox invisible
     ctx.fillRect(player.x, player.y, player.width, player.height);
     
-    // Draw the animated horse sprite on top of the hitbox
-    if (animation.totalFrames > 0) {
-        // Calculate the source rectangle in the sprite sheet
-        const sx = animation.currentFrame * animation.frameWidth;
-        const sy = 0; // Assuming single row sprite sheet
-        const sw = animation.frameWidth;
-        const sh = animation.frameHeight;
+    // Draw the current horse frame or jump frame
+    if (player.isJumping && jumpFrame.complete && jumpFrame.naturalHeight !== 0) {
+        // Use jump frame when in the air
+        const dx = player.x - (player.width * 0.75);
+        const dy = player.y - (player.height * 0.6);
+        const dw = player.width * 3.0;
+        const dh = player.height * 2.5;
         
-        // Calculate the destination rectangle on the canvas
-        // Position the horse sprite to align with the hitbox
-        const dx = player.x - 17.5; // Adjusted offset to center sprite on narrower hitbox
-        const dy = player.y - 20; // Offset to better align with hitbox
-        const dw = player.width * 2.2; // Slightly increased multiplier to maintain visual size
-        const dh = player.height * 1.8; // Adjust size as needed
+        ctx.drawImage(jumpFrame, dx, dy, dw, dh);
+    } else if (horseFrames[animation.currentFrameIndex] && 
+               horseFrames[animation.currentFrameIndex].complete && 
+               horseFrames[animation.currentFrameIndex].naturalHeight !== 0) {
+        // Use running animation frames when on the ground
+        const dx = player.x - (player.width * 0.75);
+        const dy = player.y - (player.height * 0.6);
+        const dw = player.width * 3.0;
+        const dh = player.height * 2.5;
         
-        // Draw the current frame
-        ctx.drawImage(horseSprite, sx, sy, sw, sh, dx, dy, dw, dh);
-        
-        // For debugging: uncomment to see the hitbox
-        // ctx.strokeStyle = 'blue';
-        // ctx.lineWidth = 2;
-        // ctx.strokeRect(player.x, player.y, player.width, player.height);
+        ctx.drawImage(horseFrames[animation.currentFrameIndex], dx, dy, dw, dh);
     } else {
-        // Fallback to the blue rectangle if sprite isn't loaded yet
+        // Fallback to the blue rectangle if images aren't loaded yet
         ctx.fillStyle = player.color;
         ctx.fillRect(player.x, player.y, player.width, player.height);
     }
@@ -442,6 +477,20 @@ function draw() {
         }
     }
     
+    // Display collision notification if recently happened
+    if (collisionNotificationTime > 0) {
+        const notificationDuration = 2000; // 2 seconds
+        if (Date.now() - collisionNotificationTime < notificationDuration) {
+            ctx.fillStyle = 'red';
+            ctx.font = 'bold 30px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText("COLLISION!", canvas.width / 2, 200);
+            ctx.textAlign = 'left';
+        } else {
+            collisionNotificationTime = 0; // Reset collision notification time
+        }
+    }
+    
     // Display current speed in the top right corner
     ctx.textAlign = 'right';
     
@@ -502,7 +551,7 @@ function restartGame() {
 }
 
 // Update the game loop initialization
-// Update the startGame function to reset shield status
+// Update the startGame function to properly position the player
 function startGame() {
     // Reset everything
     obstacles = [];
@@ -510,7 +559,7 @@ function startGame() {
     jumpCount = 0;
     gameOver = false;
     hasWon = false;
-    player.y = canvas.height - player.height - 20;
+    player.y = canvas.height - player.height - GROUND_PADDING;
     player.dy = 0;
     player.isJumping = false;
     player.maxSpeed = 5;
@@ -518,7 +567,12 @@ function startGame() {
     player.hasShield = false; // Reset shield status
     shieldNotificationTime = 0; // Reset notification time
     shieldUsedNotificationTime = 0; // Reset shield used notification
+    collisionNotificationTime = 0; // Reset collision notification
     finishLine.visible = false;
+    distanceTraveled = 0; // Reset distance traveled
+    
+    // Create the fixed pattern of obstacles
+    createObstacles();
     
     // Record the start time
     gameStartTime = Date.now();
@@ -561,11 +615,11 @@ resumeButton.addEventListener('click', () => {
 
 // Go back to the main menu
 mainMenuButton.addEventListener('click', () => {
-    window.location.href = 'index.html';
+    window.location.href = 'home.html';
 });
 
 mainMenuButtonGameOver.addEventListener('click', () => {
-    window.location.href = 'index.html';
+    window.location.href = 'home.html';
 });
 
 // Restart the game
@@ -586,7 +640,7 @@ document.addEventListener('keydown', event => {
 // Add event listeners for the winning screen buttons
 restartButtonWin.addEventListener('click', restartGame);
 mainMenuButtonWin.addEventListener('click', () => {
-    window.location.href = 'index.html';
+    window.location.href = 'home.html';
 });
 
 // Start the game loop with timestamp
@@ -840,3 +894,4 @@ function calculateStats(characterId, horseId) {
     
     return result;
 }
+
