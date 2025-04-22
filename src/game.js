@@ -16,7 +16,7 @@ const restartButtonWin = document.getElementById('restartButtonWin');
 const mainMenuButtonWin = document.getElementById('mainMenuButtonWin');
 let gameStartTime = 0;
 let hasWon = false;
-const FINISH_SCORE = 2500;
+const FINISH_SCORE = 2300;
 let finishLine = {
     x: 0,
     visible: false
@@ -194,6 +194,12 @@ function update(timestamp) {
     // Update the background position
     updateBackground();
     
+    // Check if we're exactly at the finish line score
+    if (score === FINISH_SCORE && !finishLine.visible) {
+        finishLine.visible = true;
+        finishLine.x = canvas.width + 100; // Start off-screen
+    }
+    
     // Check if we're approaching the finish line
     if (score >= FINISH_SCORE && !finishLine.visible) {
         finishLine.visible = true;
@@ -292,12 +298,6 @@ function update(timestamp) {
     // Increase score
     score += 1;
     
-    // Check for win condition
-    if (score >= FINISH_SCORE) {
-        winGame();
-        return;
-    }
-    
     // Increase distance traveled based on player speed
     distanceTraveled += player.currentSpeed;
     
@@ -377,26 +377,46 @@ function draw() {
     
     // Draw finish line if visible
     if (finishLine.visible) {
-        ctx.fillStyle = 'gold';
-        ctx.fillRect(finishLine.x, 0, 10, canvas.height);
+        // Make the finish line wider and more visible
+        const finishLineWidth = 30; // Increased from 15 to 30
         
-        // Draw checkered pattern
+        // Draw the finish line base
+        ctx.fillStyle = 'gold';
+        ctx.fillRect(finishLine.x, 0, finishLineWidth, canvas.height);
+        
+        // Draw a more pronounced checkered pattern
         ctx.fillStyle = 'black';
         const checkerSize = 20;
         for (let y = 0; y < canvas.height; y += checkerSize * 2) {
             for (let i = 0; i < 2; i++) {
-                ctx.fillRect(finishLine.x, y + i * checkerSize, 10, checkerSize);
+                ctx.fillRect(finishLine.x, y + i * checkerSize, finishLineWidth, checkerSize);
             }
         }
         
+        // Add finishing posts
+        ctx.fillStyle = 'brown';
+        ctx.fillRect(finishLine.x - 15, 0, 15, canvas.height / 3);
+        ctx.fillRect(finishLine.x - 15, canvas.height * 2/3, 15, canvas.height/3);
+        ctx.fillRect(finishLine.x + finishLineWidth, 0, 15, canvas.height / 3);
+        ctx.fillRect(finishLine.x + finishLineWidth, canvas.height * 2/3, 15, canvas.height/3);
+        
         // Draw "FINISH" text
         ctx.save();
-        ctx.translate(finishLine.x - 15, canvas.height / 2);
+        ctx.translate(finishLine.x - 20, canvas.height / 2);
         ctx.rotate(-Math.PI / 2);
         ctx.fillStyle = 'red';
-        ctx.font = 'bold 30px Arial';
+        ctx.font = 'bold 36px Arial';
         ctx.fillText('FINISH', 0, 0);
         ctx.restore();
+        
+        // Add flashing effect when close
+        if (finishLine.x - player.x < 300) {
+            const flashRate = Math.sin(Date.now() / 100) > 0;
+            if (flashRate) {
+                ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';  // Yellow glow
+                ctx.fillRect(finishLine.x - 20, 0, finishLineWidth + 40, canvas.height);
+            }
+        }
     }
     
     // Draw obstacles
@@ -415,14 +435,11 @@ function draw() {
         );
     });
     
-    // Display score
+    // Display only the timer
     ctx.fillStyle = 'black';
     ctx.font = '20px Arial';
-    ctx.fillText(`Score: ${score}`, 10, 30);
-    
-    // Display timer under the score
     const currentTime = (Date.now() - gameStartTime) / 1000;
-    ctx.fillText(`Time: ${currentTime.toFixed(1)}s`, 10, 50);
+    ctx.fillText(`Time: ${currentTime.toFixed(1)}s`, 10, 30);
     
     // Display shield notification if recently obtained
     if (shieldNotificationTime > 0) {
