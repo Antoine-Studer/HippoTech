@@ -1,21 +1,39 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
-    background: rgb(255,136,0);
-    background: linear-gradient(56deg, rgba(255,136,0,1) 39%, rgba(255,201,0,1) 70%, rgba(237,217,26,1) 100%);
+    background: var(--primary-gradient);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
     padding: 20px;
     height: 100vh;
+    color: var(--text-color);
+}
+
+:root {
+    --primary-color: #1c3144; /* Darker navy blue */
+    --secondary-color: #3a7ca5; /* Medium blue */
+    --accent-color: #f2c94c; /* Brighter gold */
+    --dark-color: #0f1c2d; /* Very dark blue */
+    --light-color: #ffffff; /* Pure white */
+    --text-color: #e6e6e6; /* Off-white for main text */
+    --panel-bg: rgba(255, 255, 255, 0.15); /* More opaque panels */
+    --danger-color: #e53e3e; /* Brighter red for warnings */
+    --success-color: #38a169; /* Brighter green */
+    
+    /* Updated gradients */
+    --primary-gradient: linear-gradient(135deg, #234a6d, #0f1c2d);
+    --accent-gradient: linear-gradient(135deg, #f2c94c, #f2994a);
 }
 
 h1, h2 {
-    font-family: 'Rye', cursive;
-    color: #8B4513;
-    text-shadow: 2px 2px #000;
+    font-family: 'Cinzel', serif;
+    color: var(--light-color);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 h1 {
@@ -25,9 +43,9 @@ h1 {
 
 h2 {
     font-size: 2em;
-    color: #A0522D;
+    color: var(--light-color);
     margin-bottom: 20px;
-    text-shadow: 1px 1px #000;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .card-info {
@@ -53,23 +71,26 @@ h2 {
     position: fixed;
     top: 10px;
     left: 10px;
-    padding: 8px 15px;
-    background-color: #8B4513;
-    color: white;
-    border: 2px solid #A0522D;
-    border-radius: 5px;
+    padding: 12px 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-    height: 36px;
-    font-family: 'Rye', cursive;
-    text-shadow: 1px 1px #000;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    height: 40px;
+    font-family: 'Cinzel', serif;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     z-index: 100;
 }
 
 .back-button:hover {
-    background-color: #A0522D;
-    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
 }
 
 #cardStats {
@@ -77,12 +98,12 @@ h2 {
     width: 50vw;
     position: absolute;
     left: 60%;
-    color: #5D3A1E;
+    color: var(--text-color);
 }
 
 .card-description {
     width: 50%;
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
-    color: #3E2723;
+    color: var(--text-color);
 }

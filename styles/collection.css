@@ -1,3 +1,19 @@
+:root {
+    --primary-color: #1c3144; /* Darker navy blue */
+    --secondary-color: #3a7ca5; /* Medium blue */
+    --accent-color: #f2c94c; /* Brighter gold */
+    --dark-color: #0f1c2d; /* Very dark blue */
+    --light-color: #ffffff; /* Pure white */
+    --text-color: #e6e6e6; /* Off-white for main text */
+    --panel-bg: rgba(255, 255, 255, 0.15); /* More opaque panels */
+    --danger-color: #e53e3e; /* Brighter red for warnings */
+    --success-color: #38a169; /* Brighter green */
+    
+    /* Updated gradients */
+    --primary-gradient: linear-gradient(135deg, #234a6d, #0f1c2d);
+    --accent-gradient: linear-gradient(135deg, #f2c94c, #f2994a);
+}
+
 #full-display {
     display: flex;
     justify-content: center;
@@ -6,6 +22,7 @@
     width: 100%;
     box-sizing: border-box;
 }
+
 #collectionDisplay {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -13,12 +30,14 @@
     width: 100%;
     max-width: 1200px;
 }
+
 .card {
     width: 100%;
     height: 700px;
     position: relative;
     overflow: hidden;
 }
+
 .card canvas {
     position: absolute;
     top: 0;
@@ -33,6 +52,7 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
 @media (max-width: 600px) {
     #cardDisplay {
         grid-template-columns: 1fr;
@@ -40,50 +60,52 @@
 }
 
 body {
-    background: rgb(255,136,0);
-    background: linear-gradient(56deg, rgba(255,136,0,1) 39%, rgba(255,201,0,1) 70%, rgba(237,217,26,1) 100%);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    font-family: 'Rye', cursive;
+    font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center; 
+    background: var(--primary-gradient);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
     padding: 20px;
-    height: 100vh; /* Ensure the body takes the full height of the viewport */
+    height: 100vh;
+    color: var(--text-color);
 }
 
 #backBtn {
     position: absolute;
     top: 20px;
     left: 20px;
-    padding: 15px 30px;
-    font-size: 18px;
-    background-color: #8B4513; /* Saddle brown color */
-    color: white;
-    border: 2px solid #A0522D; /* Sienna color */
-    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-    font-family: 'Rye', cursive; /* Apply the western-themed font */
-    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .type-btn {
-    padding: 15px 30px;
-    font-size: 18px;
-    background-color: #8B4513; /* Saddle brown color */
-    color: white;
-    border: 2px solid #A0522D; /* Sienna color */
-    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-    font-family: 'Rye', cursive; /* Apply the western-themed font */
-    text-shadow: 1px 1px #000; /* Adds a shadow for a more rustic look */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(66, 153, 225, 0.4);
 }
 
 #ridersBtn {
@@ -91,37 +113,51 @@ body {
 }
 
 #backBtn:hover {
-    background-color: #A0522D; /* Sienna color */
-    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
 }
 
-
 h1 {
-    font-size: 4em;
-    color: #8B4513; /* Saddle brown color */
-    margin-bottom: 10px;
-    text-shadow: 2px 2px #000; /* Adds a shadow for a more rustic look */
+    font-family: 'Cinzel', serif;
+    font-size: 3em;
+    color: var(--light-color);
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .info-button-container {
     position: absolute;
     bottom: 10px;
     left: 50%;
-    z-index: 10; /* Ensure button is above other elements */
+    z-index: 10;
 }
 
-.info-button  {
+.info-button {
     transform: translateX(-50%);
     padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--success-color);
+    color: var(--light-color);
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-family: 'Cinzel', serif;
     font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-button:hover {
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .info-button.uncollected {
-    background-color: #888;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
 }
 

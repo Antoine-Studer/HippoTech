@@ -95,12 +95,6 @@
             this.src = `assets/${character.name.split(',')[0]}.png`;
             console.log(`Trying fallback: ${this.src}`);
             
-            // If fallback also fails
-            this.onerror = function() {
-                console.error(`Fallback also failed: ${this.src}`);
-                this.src = 'assets/default.png'; // Final fallback to a default image
-                this.style.border = '2px solid red'; // Visual indicator of failed load
-            };
         };
         
         // Create character information
@@ -265,7 +259,7 @@
         
         // Back button logic
         document.getElementById('backButton').addEventListener('click', function() {
-            window.location.href = 'index.html';
+            window.location.href = 'home.html';
         });
     </script>
 </body>
