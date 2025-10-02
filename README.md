@@ -1,4 +1,4 @@
-# A fun little game about horses
+# A fun little TGC about horses
 
 ## Config of the nodes
 
@@ -25,5 +25,5 @@ Open the app on localhost:5173
 ## Config of the database
 
 Install PostGreSQL
-- make the password be 'admin'
+- make the password 'admin'
 - don't change the port
